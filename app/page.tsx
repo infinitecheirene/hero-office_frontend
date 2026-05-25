@@ -38,22 +38,19 @@ const features = [
 
 const services = [
   {
-    title: "Serviced Offices",
+    title: "Private Office",
     description: "Fully furnished private offices with modern amenities and flexible lease terms.",
     image: "/office-1.jpg",
-    price: "From ₱25,000/month",
   },
   {
-    title: "Virtual Offices",
-    description: "Professional business address and call handling services for remote businesses.",
+    title: "Cafe Area",
+    description: "A comfortable café space perfect for informal meetings, networking, or focused work in a relaxed environment.",
     image: "/virtual-office.jpg",
-    price: "From ₱8,000/month",
   },
   {
-    title: "Conference Rooms",
+    title: "Conference Room",
     description: "State-of-the-art meeting rooms equipped with video conferencing capabilities.",
     image: "/conference.jpg",
-    price: "From ₱1,500/hour",
   },
 ];
 
@@ -211,9 +208,6 @@ export default function Home() {
                   </h3>
                   <p className="text-gray-600 mb-4">{service.description}</p>
                   <div className="flex items-center justify-between">
-                    <span className="text-[#1B3A8C] font-semibold">
-                      {service.price}
-                    </span>
                     <Link
                       href="/reservation"
                       className="text-sm font-medium text-gray-900 hover:text-[#1B3A8C] transition-colors"
