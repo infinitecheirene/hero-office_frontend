@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
+import { useLanguage } from "../../components/LanguageProvider";
 
 // Dynamic import for the PanoramaViewer to avoid SSR issues
 const PanoramaViewer = dynamic(() => import("../../components/PanoramaViewer"), {
@@ -33,72 +34,104 @@ const PanoramaViewer = dynamic(() => import("../../components/PanoramaViewer"), 
   ),
 });
 
-const tourLocations = [
-  {
-    id: "lobby",
-    title: "Main Lobby",
-    description: "Professional reception with concierge services",
-    features: ["24/7 Front Desk", "Bilingual Staff", "Secure Access"],
-  },
-  {
-    id: "office-premium",
-    title: "Premium Office Suite",
-    description: "Private office with panoramic city views",
-    features: ["Ergonomic Furniture", "High-Speed Internet", "City View"],
-  },
-  {
-    id: "meeting-large",
-    title: "Executive Boardroom",
-    description: "Conference room for up to 20 people",
-    features: ["4K Video Wall", "Video Conferencing", "Whiteboard Wall"],
-  },
-  {
-    id: "lounge",
-    title: "Business Lounge",
-    description: "Relaxing space for informal meetings",
-    features: ["Premium Coffee", "Comfortable Seating", "Newspapers"],
-  },
-  {
-    id: "cafe",
-    title: "Cafe Area",
-    description: "Modern cafeteria with daily meal options",
-    features: ["Hot Meals", "30-Seat Capacity", "24/7 Vending"],
-  },
-];
-
-const features = [
-  {
-    icon: Rotate3D,
-    title: "360° View",
-    description: "Drag to look around the entire space",
-  },
-  {
-    icon: MousePointer2,
-    title: "Interactive Hotspots",
-    description: "Click highlighted areas for details",
-  },
-  {
-    icon: Expand,
-    title: "Fullscreen Mode",
-    description: "Immersive full-screen experience",
-  },
-  {
-    icon: MapPin,
-    title: "Multi-Room Tour",
-    description: "Navigate between different spaces",
-  },
-];
-
-const amenities = [
-  { icon: Wifi, title: "High-Speed Internet", description: "Fiber optic connection" },
-  { icon: Video, title: "Video Conferencing", description: "4K displays & cameras" },
-  { icon: Coffee, title: "Coffee & Refreshments", description: "Complimentary bar" },
-  { icon: Shield, title: "24/7 Security", description: "CCTV & access control" },
-  { icon: Users, title: "Meeting Rooms", description: "Various sizes available" },
-  { icon: Building2, title: "Prime Location", description: "Ayala Avenue, Makati" },
-];
-
 export default function VirtualTourPage() {
+  const { t } = useLanguage();
+
+  const tourLocations = [
+    {
+      id: "lobby",
+      title: t("virtualTour.locations.tower6789") as string,
+      description: t("virtualTour.locations.tower6789Desc") as string,
+      features: t("virtualTour.locations.tower6789Features") as unknown as string[],
+    },
+    {
+      id: "office-premium",
+      title: t("virtualTour.locations.tower6789Office") as string,
+      description: t("virtualTour.locations.tower6789OfficeDesc") as string,
+      features: t("virtualTour.locations.tower6789OfficeFeatures") as unknown as string[],
+    },
+    {
+      id: "meeting-large",
+      title: t("virtualTour.locations.insularLifeMeeting") as string,
+      description: t("virtualTour.locations.insularLifeMeetingDesc") as string,
+      features: t("virtualTour.locations.insularLifeMeetingFeatures") as unknown as string[],
+    },
+    {
+      id: "lounge",
+      title: t("virtualTour.locations.insularLife") as string,
+      description: t("virtualTour.locations.insularLifeDesc") as string,
+      features: t("virtualTour.locations.insularLifeFeatures") as unknown as string[],
+    },
+    {
+      id: "cafe",
+      title: "Cafe Area",
+      description: "Modern cafeteria with daily meal options",
+      features: ["Hot Meals", "30-Seat Capacity", "24/7 Vending"],
+    },
+  ];
+
+  const features = [
+    {
+      icon: Rotate3D,
+      title: t("virtualTour.features.immersive") as string,
+      description: t("virtualTour.features.immersiveDesc") as string,
+    },
+    {
+      icon: MousePointer2,
+      title: t("virtualTour.features.interactive") as string,
+      description: t("virtualTour.features.interactiveDesc") as string,
+    },
+    {
+      icon: Expand,
+      title: t("virtualTour.features.anytime") as string,
+      description: t("virtualTour.features.anytimeDesc") as string,
+    },
+    {
+      icon: MapPin,
+      title: t("virtualTour.features.multiple") as string,
+      description: t("virtualTour.features.multipleDesc") as string,
+    },
+  ];
+
+  const amenities = [
+    { icon: Wifi, title: "High-Speed Internet", description: "Fiber optic connection" },
+    { icon: Video, title: "Video Conferencing", description: "4K displays & cameras" },
+    { icon: Coffee, title: "Coffee & Refreshments", description: "Complimentary bar" },
+    { icon: Shield, title: "24/7 Security", description: "CCTV & access control" },
+    { icon: Users, title: "Meeting Rooms", description: "Various sizes available" },
+    { icon: Building2, title: "Prime Location", description: "Ayala Avenue, Makati" },
+  ];
+
+  const instructions = [
+    { icon: MousePointer2, text: t("virtualTour.viewer.instructions") as string },
+    { icon: MapPin, text: t("virtualTour.viewer.instructions") as string },
+    { icon: Expand, text: t("virtualTour.features.anytime") as string },
+    { icon: Rotate3D, text: t("virtualTour.features.immersive") as string },
+  ];
+
+  const howToSteps = [
+    {
+      step: "1",
+      title: t("virtualTour.howTo.step1") as string,
+      description: t("virtualTour.howTo.step1Desc") as string,
+    },
+    {
+      step: "2",
+      title: t("virtualTour.howTo.step2") as string,
+      description: t("virtualTour.howTo.step2Desc") as string,
+    },
+    {
+      step: "3",
+      title: t("virtualTour.howTo.step3") as string,
+      description: t("virtualTour.howTo.step3Desc") as string,
+    },
+    {
+      step: "4",
+      title: t("virtualTour.howTo.step4") as string,
+      description: t("virtualTour.howTo.step4Desc") as string,
+    },
+  ];
+
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
@@ -116,11 +149,10 @@ export default function VirtualTourPage() {
               360° Interactive Experience
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-              Virtual Tour
+              {t("virtualTour.hero.title") as string}
             </h1>
             <p className="text-xl text-gray-300">
-              Explore our facilities in immersive 360°. Drag to look around,
-              click hotspots for information, and navigate between rooms.
+              {t("virtualTour.hero.subtitle") as string}
             </p>
           </motion.div>
         </div>
@@ -139,12 +171,7 @@ export default function VirtualTourPage() {
 
           {/* Quick Instructions */}
           <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
-            {[
-              { icon: MousePointer2, text: "Drag to look around" },
-              { icon: MapPin, text: "Click hotspots for info" },
-              { icon: Expand, text: "Fullscreen mode" },
-              { icon: Rotate3D, text: "Auto-rotation" },
-            ].map((item, index) => (
+            {instructions.map((item, index) => (
               <div key={index} className="flex items-center gap-3 bg-white rounded-lg p-3">
                 <item.icon className="w-5 h-5 text-blue-600" />
                 <span className="text-sm text-gray-700">{item.text}</span>
@@ -159,10 +186,10 @@ export default function VirtualTourPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Explore Our Spaces
+              {t("virtualTour.locations.title") as string}
             </h2>
             <p className="text-lg text-gray-600">
-              Navigate through different areas of our facility
+              {t("virtualTour.hero.subtitle") as string}
             </p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -203,10 +230,10 @@ export default function VirtualTourPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Premium Amenities
+              {t("virtualTour.amenities.title") as string}
             </h2>
             <p className="text-lg text-gray-600">
-              Everything you need for a productive workday
+              {t("virtualTour.amenities.subtitle") as string}
             </p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -237,10 +264,10 @@ export default function VirtualTourPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Tour Features
+              {t("virtualTour.features.title") as string}
             </h2>
             <p className="text-lg text-gray-600">
-              Designed for the best virtual viewing experience
+              {t("virtualTour.features.subtitle") as string}
             </p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -270,34 +297,13 @@ export default function VirtualTourPage() {
       <section className="py-20 bg-gray-900 text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">How to Navigate</h2>
+            <h2 className="text-3xl font-bold mb-4">{t("virtualTour.howTo.title") as string}</h2>
             <p className="text-gray-400">
-              Get the most out of your virtual tour experience
+              {t("virtualTour.features.subtitle") as string}
             </p>
           </div>
           <div className="grid md:grid-cols-2 gap-6">
-            {[
-              {
-                step: "1",
-                title: "Drag to Look Around",
-                description: "Click and drag with your mouse (or touch and drag on mobile) to view the entire 360° space.",
-              },
-              {
-                step: "2",
-                title: "Click Hotspots",
-                description: "Look for pulsing white dots and blue arrows. Click them to see details or navigate to other rooms.",
-              },
-              {
-                step: "3",
-                title: "Use Controls",
-                description: "Use the bottom navigation to switch between rooms. Click the compass for auto-rotation.",
-              },
-              {
-                step: "4",
-                title: "Fullscreen Mode",
-                description: "Click the expand button for an immersive full-screen experience of our facilities.",
-              },
-            ].map((item) => (
+            {howToSteps.map((item) => (
               <div key={item.step} className="flex gap-4 p-6 bg-white/5 backdrop-blur-sm rounded-2xl">
                 <div className="w-10 h-10 bg-[#1B3A8C] rounded-full flex items-center justify-center flex-shrink-0 font-bold">
                   {item.step}
@@ -316,23 +322,23 @@ export default function VirtualTourPage() {
       <section className="py-20 bg-gradient-to-r from-[#1B3A8C] to-[#3B5EA6]">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
-            Ready to See It in Person?
+            {t("virtualTour.cta.title") as string}
           </h2>
           <p className="text-xl text-white/90 mb-8">
-            Schedule a physical tour and experience our facilities firsthand
+            {t("virtualTour.cta.subtitle") as string}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/reservation"
               className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-[#1B3A8C] rounded-full font-semibold hover:bg-gray-100 transition-colors"
             >
-              Book a Physical Tour
+              {t("virtualTour.cta.bookTour") as string}
             </Link>
             <Link
               href="/contact"
               className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-transparent border-2 border-white text-white rounded-full font-semibold hover:bg-white/10 transition-colors"
             >
-              Contact Us
+              {t("virtualTour.cta.contactUs") as string}
             </Link>
           </div>
         </div>

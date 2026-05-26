@@ -18,36 +18,38 @@ import {
   Briefcase,
   MapPin,
 } from "lucide-react";
-
-const spaceTypes = [
-  { id: "serviced-office", name: "Serviced Office", icon: Building2 },
-  { id: "meeting-room", name: "Meeting Room", icon: Users },
-  { id: "virtual-office", name: "Virtual Office", icon: Briefcase },
-];
-
-const officePlans = [
-  { id: "starter", name: "Starter (2-3 pax)", price: "₱25,000/month" },
-  { id: "professional", name: "Professional (4-6 pax)", price: "₱45,000/month" },
-  { id: "enterprise", name: "Enterprise (8-12 pax)", price: "₱75,000/month" },
-];
-
-const meetingRooms = [
-  { id: "small", name: "Small Room (4-6 pax)", price: "₱1,500/hour" },
-  { id: "large", name: "Large Room (8-20 pax)", price: "₱3,000/hour" },
-];
-
-const virtualPlans = [
-  { id: "basic", name: "Basic Virtual Office", price: "₱8,000/month" },
-  { id: "premium", name: "Premium Virtual Office", price: "₱15,000/month" },
-];
-
-const paymentMethods = [
-  { id: "bank-transfer", name: "Bank Transfer", description: "Direct bank deposit or online transfer" },
-  { id: "check", name: "Check Payment", description: "Company or personal check" },
-  { id: "cash", name: "Cash Payment", description: "Pay at our office" },
-];
+import { useLanguage } from "../../components/LanguageProvider";
 
 export default function ReservationPage() {
+  const { t } = useLanguage();
+
+  const spaceTypes = [
+    { id: "serviced-office", name: t("reservation.spaceTypes.servicedOffice") as string, icon: Building2 },
+    { id: "meeting-room", name: t("reservation.spaceTypes.meetingRoom") as string, icon: Users },
+    { id: "virtual-office", name: t("reservation.spaceTypes.virtualOffice") as string, icon: Briefcase },
+  ];
+
+  const officePlans = [
+    { id: "starter", name: t("reservation.plans.starter") as string, price: "₱25,000/month" },
+    { id: "professional", name: t("reservation.plans.professional") as string, price: "₱45,000/month" },
+    { id: "enterprise", name: t("reservation.plans.enterprise") as string, price: "₱75,000/month" },
+  ];
+
+  const meetingRooms = [
+    { id: "small", name: t("reservation.meetingRooms.small") as string, price: "₱1,500/hour" },
+    { id: "large", name: t("reservation.meetingRooms.large") as string, price: "₱3,000/hour" },
+  ];
+
+  const virtualPlans = [
+    { id: "basic", name: t("reservation.virtualPlans.basic") as string, price: "₱8,000/month" },
+    { id: "premium", name: t("reservation.virtualPlans.premium") as string, price: "₱15,000/month" },
+  ];
+
+  const paymentMethods = [
+    { id: "bank-transfer", name: t("reservation.paymentMethods.bankTransfer") as string, description: t("reservation.paymentMethods.bankTransferDesc") as string },
+    { id: "check", name: t("reservation.paymentMethods.check") as string, description: t("reservation.paymentMethods.checkDesc") as string },
+    { id: "cash", name: t("reservation.paymentMethods.cash") as string, description: t("reservation.paymentMethods.cashDesc") as string },
+  ];
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     spaceType: "",
@@ -114,32 +116,31 @@ export default function ReservationPage() {
               <CheckCircle2 className="w-10 h-10 text-green-600" />
             </div>
             <h1 className="text-3xl font-bold text-gray-900 mb-4">
-              Reservation Submitted!
+              {t("reservation.success.title") as string}
             </h1>
             <p className="text-gray-600 mb-8">
-              Thank you for your reservation request. Our team will review your submission
-              and payment proof, then contact you within 24 hours to confirm your booking.
+              {t("reservation.success.subtitle") as string}
             </p>
             <div className="bg-[#C5D2EC]/30 rounded-xl p-6 mb-8 text-left">
-              <h3 className="font-semibold text-gray-900 mb-4">What happens next?</h3>
+              <h3 className="font-semibold text-gray-900 mb-4">{t("reservation.success.nextStepsTitle") as string}</h3>
               <ul className="space-y-3 text-gray-600">
                 <li className="flex items-start gap-3">
                   <span className="w-6 h-6 bg-[#1B3A8C] rounded-full flex items-center justify-center text-white text-xs flex-shrink-0">
                     1
                   </span>
-                  <span>Our team will verify your payment within 24 hours</span>
+                  <span>{t("reservation.success.step1") as string}</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="w-6 h-6 bg-[#1B3A8C] rounded-full flex items-center justify-center text-white text-xs flex-shrink-0">
                     2
                   </span>
-                  <span>You will receive a confirmation email with your reservation details</span>
+                  <span>{t("reservation.success.step2") as string}</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="w-6 h-6 bg-[#1B3A8C] rounded-full flex items-center justify-center text-white text-xs flex-shrink-0">
                     3
                   </span>
-                  <span>Our team will contact you to finalize arrangements</span>
+                  <span>{t("reservation.success.step3") as string}</span>
                 </li>
               </ul>
             </div>
@@ -148,13 +149,13 @@ export default function ReservationPage() {
                 href="/"
                 className="px-8 py-3 bg-[#1B3A8C] text-white rounded-full font-semibold hover:bg-[#3B5EA6] transition-colors"
               >
-                Back to Home
+                {t("reservation.success.backHome") as string}
               </a>
               <a
                 href="/contact"
                 className="px-8 py-3 bg-gray-100 text-gray-700 rounded-full font-semibold hover:bg-gray-200 transition-colors"
               >
-                Contact Support
+                {t("reservation.success.contactSupport") as string}
               </a>
             </div>
           </motion.div>
@@ -176,11 +177,10 @@ export default function ReservationPage() {
             className="text-center"
           >
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
-              Make a Reservation
+              {t("reservation.hero.title") as string}
             </h1>
             <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-              Book your office space, meeting room, or virtual office. Complete the form
-              below and submit your payment proof.
+              {t("reservation.hero.subtitle") as string}
             </p>
           </motion.div>
         </div>
@@ -214,10 +214,10 @@ export default function ReservationPage() {
               ))}
             </div>
             <div className="flex justify-between mt-2 text-sm text-gray-600">
-              <span className="w-10 text-center">Space</span>
-              <span className="w-10 text-center">Schedule</span>
-              <span className="w-10 text-center">Details</span>
-              <span className="w-10 text-center">Payment</span>
+              <span className="w-10 text-center">{t("reservation.steps.space") as string}</span>
+              <span className="w-10 text-center">{t("reservation.steps.schedule") as string}</span>
+              <span className="w-10 text-center">{t("reservation.steps.details") as string}</span>
+              <span className="w-10 text-center">{t("reservation.steps.payment") as string}</span>
             </div>
           </div>
 
@@ -230,7 +230,7 @@ export default function ReservationPage() {
                 className="bg-white rounded-2xl shadow-sm p-6 md:p-8"
               >
                 <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                  Select Space Type
+                  {t("reservation.step1.title") as string}
                 </h2>
                 <div className="grid md:grid-cols-3 gap-4 mb-6">
                   {spaceTypes.map((type) => (
@@ -264,7 +264,7 @@ export default function ReservationPage() {
 
                 {formData.spaceType && (
                   <div className="mt-6">
-                    <h3 className="font-semibold text-gray-900 mb-4">Select Plan</h3>
+                    <h3 className="font-semibold text-gray-900 mb-4">{t("reservation.step1.selectPlan") as string}</h3>
                     <div className="space-y-3">
                       {getPlanOptions().map((plan) => (
                         <button
@@ -315,13 +315,13 @@ export default function ReservationPage() {
                 className="bg-white rounded-2xl shadow-sm p-6 md:p-8"
               >
                 <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                  Schedule Your Booking
+                  {t("reservation.step2.title") as string}
                 </h2>
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       <Calendar className="w-4 h-4 inline mr-2" />
-                      Preferred Date
+                      {t("reservation.step2.preferredDate") as string}
                     </label>
                     <input
                       type="date"
@@ -335,7 +335,7 @@ export default function ReservationPage() {
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       <Clock className="w-4 h-4 inline mr-2" />
-                      Preferred Time
+                      {t("reservation.step2.preferredTime") as string}
                     </label>
                     <select
                       name="time"
@@ -344,7 +344,7 @@ export default function ReservationPage() {
                       className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#1B3A8C] focus:border-transparent"
                       required
                     >
-                      <option value="">Select time</option>
+                      <option value="">{t("reservation.step2.selectTime") as string}</option>
                       <option value="09:00">9:00 AM</option>
                       <option value="10:00">10:00 AM</option>
                       <option value="11:00">11:00 AM</option>
@@ -359,7 +359,7 @@ export default function ReservationPage() {
                 {formData.spaceType === "meeting-room" && (
                   <div className="mt-6">
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Duration
+                      {t("reservation.step2.duration") as string}
                     </label>
                     <select
                       name="duration"
@@ -367,11 +367,11 @@ export default function ReservationPage() {
                       onChange={handleInputChange}
                       className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#1B3A8C] focus:border-transparent"
                     >
-                      <option value="1">1 hour</option>
-                      <option value="2">2 hours</option>
-                      <option value="3">3 hours</option>
-                      <option value="4">Half day (4 hours)</option>
-                      <option value="8">Full day (8 hours)</option>
+                      <option value="1">{t("reservation.step2.1hour") as string}</option>
+                      <option value="2">{t("reservation.step2.2hours") as string}</option>
+                      <option value="3">{t("reservation.step2.3hours") as string}</option>
+                      <option value="4">{t("reservation.step2.halfDay") as string}</option>
+                      <option value="8">{t("reservation.step2.fullDay") as string}</option>
                     </select>
                   </div>
                 )}
@@ -383,7 +383,7 @@ export default function ReservationPage() {
                     className="px-6 py-3 bg-gray-100 text-gray-700 rounded-full font-semibold hover:bg-gray-200 transition-colors flex items-center gap-2"
                   >
                     <ChevronLeft className="w-5 h-5" />
-                    Back
+                    {t("reservation.back") as string}
                   </button>
                   <button
                     type="button"
@@ -406,13 +406,13 @@ export default function ReservationPage() {
                 className="bg-white rounded-2xl shadow-sm p-6 md:p-8"
               >
                 <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                  Your Information
+                  {t("reservation.step3.title") as string}
                 </h2>
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       <User className="w-4 h-4 inline mr-2" />
-                      Full Name *
+                      {t("reservation.step3.fullName") as string} *
                     </label>
                     <input
                       type="text"
@@ -427,7 +427,7 @@ export default function ReservationPage() {
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       <Briefcase className="w-4 h-4 inline mr-2" />
-                      Company Name
+                      {t("reservation.step3.companyName") as string}
                     </label>
                     <input
                       type="text"
@@ -441,7 +441,7 @@ export default function ReservationPage() {
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       <Mail className="w-4 h-4 inline mr-2" />
-                      Email Address *
+                      {t("reservation.step3.emailAddress") as string} *
                     </label>
                     <input
                       type="email"
@@ -456,7 +456,7 @@ export default function ReservationPage() {
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       <Phone className="w-4 h-4 inline mr-2" />
-                      Phone Number *
+                      {t("reservation.step3.phoneNumber") as string} *
                     </label>
                     <input
                       type="tel"
@@ -471,7 +471,7 @@ export default function ReservationPage() {
                 </div>
                 <div className="mt-6">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Additional Message
+                    {t("reservation.step3.additionalMessage") as string}
                   </label>
                   <textarea
                     name="message"
@@ -490,7 +490,7 @@ export default function ReservationPage() {
                     className="px-6 py-3 bg-gray-100 text-gray-700 rounded-full font-semibold hover:bg-gray-200 transition-colors flex items-center gap-2"
                   >
                     <ChevronLeft className="w-5 h-5" />
-                    Back
+                    {t("reservation.back") as string}
                   </button>
                   <button
                     type="button"
@@ -513,26 +513,26 @@ export default function ReservationPage() {
                 className="bg-white rounded-2xl shadow-sm p-6 md:p-8"
               >
                 <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                  Payment Details
+                  {t("reservation.step4.title") as string}
                 </h2>
                 <p className="text-gray-600 mb-6">
-                  Manual payment verification. Submit proof of payment to complete your reservation.
+                  {t("reservation.step4.subtitle") as string}
                 </p>
 
                 {/* Bank Details */}
                 <div className="bg-blue-50 rounded-xl p-6 mb-6">
                   <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
                     <CreditCard className="w-5 h-5" />
-                    Bank Account Details
+                    {t("reservation.step4.bankDetails") as string}
                   </h3>
                   <div className="space-y-3 text-sm">
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Bank Name:</span>
-                      <span className="font-medium">BDO Unibank</span>
+                      <span className="text-gray-600">{t("reservation.step4.bankName") as string}:</span>
+                      <span className="font-medium">{t("reservation.step4.bankNameValue") as string}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Account Name:</span>
-                      <span className="font-medium">Hero Serviced Office Inc.</span>
+                      <span className="text-gray-600">{t("reservation.step4.accountName") as string}:</span>
+                      <span className="font-medium">{t("reservation.step4.accountNameValue") as string}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Account Number:</span>
@@ -548,7 +548,7 @@ export default function ReservationPage() {
                 {/* Payment Method */}
                 <div className="mb-6">
                   <label className="block text-sm font-medium text-gray-700 mb-3">
-                    Select Payment Method
+                    {t("reservation.step4.selectPaymentMethod") as string}
                   </label>
                   <div className="space-y-3">
                     {paymentMethods.map((method) => (
@@ -585,7 +585,7 @@ export default function ReservationPage() {
                 <div className="mb-6">
                   <label className="block text-sm font-medium text-gray-700 mb-3">
                     <Upload className="w-4 h-4 inline mr-2" />
-                    Upload Payment Proof *
+                    {t("reservation.step4.uploadPaymentProof") as string} *
                   </label>
                   <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-blue-400 transition-colors">
                     <input
@@ -609,10 +609,10 @@ export default function ReservationPage() {
                         <>
                           <Upload className="w-10 h-10 text-gray-400 mx-auto mb-3" />
                           <p className="text-gray-600">
-                            Click to upload receipt, screenshot, or bank confirmation
+                            {t("reservation.step4.uploadInstructions") as string}
                           </p>
                           <p className="text-sm text-gray-400 mt-1">
-                            Supports: JPG, PNG, PDF (max 10MB)
+                            {t("reservation.step4.supports") as string}
                           </p>
                         </>
                       )}
@@ -623,9 +623,7 @@ export default function ReservationPage() {
                 {/* Terms */}
                 <div className="mb-6 p-4 bg-yellow-50 rounded-xl">
                   <p className="text-sm text-yellow-800">
-                    <strong>Note:</strong> Your reservation will be confirmed after
-                    payment verification (usually within 24 hours). You will receive an
-                    email confirmation once verified.
+                    <strong>{t("reservation.step4.noteLabel") as string}:</strong> {t("reservation.step4.noteText") as string}
                   </p>
                 </div>
 
@@ -636,7 +634,7 @@ export default function ReservationPage() {
                     className="px-6 py-3 bg-gray-100 text-gray-700 rounded-full font-semibold hover:bg-gray-200 transition-colors flex items-center gap-2"
                   >
                     <ChevronLeft className="w-5 h-5" />
-                    Back
+                    {t("reservation.back") as string}
                   </button>
                   <button
                     type="submit"
@@ -648,11 +646,11 @@ export default function ReservationPage() {
                     {isSubmitting ? (
                       <>
                         <span className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent" />
-                        Submitting...
+                        {t("reservation.step4.submitting") as string}
                       </>
                     ) : (
                       <>
-                        Complete Reservation
+                        {t("reservation.step4.completeReservation") as string}
                         <CheckCircle2 className="w-5 h-5" />
                       </>
                     )}
@@ -670,17 +668,17 @@ export default function ReservationPage() {
           <div className="grid md:grid-cols-3 gap-6 text-center">
             <div className="p-4">
               <Phone className="w-8 h-8 text-blue-600 mx-auto mb-2" />
-              <p className="font-semibold text-gray-900">Need Help?</p>
+              <p className="font-semibold text-gray-900">{t("reservation.support.needHelp") as string}</p>
               <p className="text-gray-600 text-sm">+63 2 8801-3417</p>
             </div>
             <div className="p-4">
               <Mail className="w-8 h-8 text-blue-600 mx-auto mb-2" />
-              <p className="font-semibold text-gray-900">Email Us</p>
+              <p className="font-semibold text-gray-900">{t("reservation.support.emailUs") as string}</p>
               <p className="text-gray-600 text-sm">sales@heroph.net</p>
             </div>
             <div className="p-4">
               <MapPin className="w-8 h-8 text-blue-600 mx-auto mb-2" />
-              <p className="font-semibold text-gray-900">Visit Us</p>
+              <p className="font-semibold text-gray-900">{t("reservation.support.visitUs") as string}</p>
               <p className="text-gray-600 text-sm">Tower 6789, Ayala Avenue</p>
             </div>
           </div>

@@ -84,8 +84,8 @@ export default function Footer() {
           <div>
             <h3 className="text-white font-semibold mb-4">{t('footer.ourServices') as string}</h3>
             <ul className="space-y-3">
-              {services.map((service) => (
-                <li key={service}>
+              {services.map((service, index) => (
+                <li key={index}>
                   <Link
                     href="/services"
                     className="text-sm hover:text-[#5C7ABF] transition-colors"
@@ -104,9 +104,9 @@ export default function Footer() {
               <li className="flex items-start gap-3">
                 <MapPin className="w-5 h-5 text-[#5C7ABF] flex-shrink-0 mt-0.5" />
                 <span className="text-sm">
-                  Tower 6789, Ayala Avenue,<br />
-                  Makati City, Metro Manila,<br />
-                  Philippines
+                  {Array.isArray(t('contact.info.addressDetails')) 
+                    ? (t('contact.info.addressDetails') as unknown as string[]).join(', ')
+                    : t('contact.info.addressDetails') as string}
                 </span>
               </li>
               <li className="flex items-center gap-3">
@@ -115,7 +115,9 @@ export default function Footer() {
                   href="tel:+63288013417"
                   className="text-sm hover:text-[#5C7ABF] transition-colors"
                 >
-                  +63 2 8801-3417
+                  {Array.isArray(t('contact.info.phoneNumbers'))
+                    ? (t('contact.info.phoneNumbers') as unknown as string[])[0]
+                    : t('contact.info.phoneNumbers') as string}
                 </a>
               </li>
               <li className="flex items-center gap-3">
@@ -124,7 +126,9 @@ export default function Footer() {
                   href="mailto:sales@heroph.net"
                   className="text-sm hover:text-[#5C7ABF] transition-colors"
                 >
-                  sales@heroph.net
+                  {Array.isArray(t('contact.info.emailAddresses'))
+                    ? (t('contact.info.emailAddresses') as unknown as string[])[0]
+                    : t('contact.info.emailAddresses') as string}
                 </a>
               </li>
             </ul>

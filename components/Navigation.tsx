@@ -27,11 +27,7 @@ export default function Navigation() {
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <div>
-              <Link href="/">
-                <Image src="/header_logo_manila.png" alt="Hero Serviced Office" width={150} height={50} />
-              </Link>
-            </div>
+            <Image src="/header_logo_manila.png" alt="Hero Serviced Office" width={150} height={50} />
           </Link>
 
           {/* Desktop Navigation */}

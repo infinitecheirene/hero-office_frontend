@@ -20,130 +20,76 @@ import {
   Train,
   ExternalLink,
 } from "lucide-react";
-
-const values = [
-  {
-    icon: Target,
-    title: "Excellence",
-    description: "We strive for excellence in every aspect of our service delivery.",
-  },
-  {
-    icon: Shield,
-    title: "Integrity",
-    description: "We operate with honesty and transparency in all our dealings.",
-  },
-  {
-    icon: Users,
-    title: "Customer First",
-    description: "Our clients' success is our top priority.",
-  },
-  {
-    icon: Globe,
-    title: "Global Standards",
-    description: "We maintain international standards in our facilities and services.",
-  },
-];
-
-const stats = [
-  { number: "15+", label: "Years of Experience" },
-  { number: "500+", label: "Companies Served" },
-  { number: "3", label: "Office Locations" },
-  { number: "50+", label: "Team Members" },
-];
-
-const locations = [
-  {
-    name: "TOWER6789 MAKATI",
-    address: "23F TOWER6789, Ayala Avenue 6789, Makati City 1209, Manila, Philippines",
-    mapUrl: "https://www.google.com/maps/place/Leopalace21+Philippines+Inc./@14.5568556,121.0168084,16z",
-  },
-  {
-    name: "INSULAR LIFE BUILDING MAKATI",
-    address: "11th Floor, Insular Life Building, 6781 Ayala Avenue corner Paseo de Roxas Avenue, Makati City, Metro Manila, Philippines",
-    mapUrl: "https://www.google.com/maps/place/Insular+Life+Building,+Ayala+Ave,+Makati,+Metro+Manila",
-  },
-];
-
-const nearbyLandmarks = [
-  {
-    icon: Plane,
-    name: "Ninoy Aquino International Airport (NAIA)",
-    description: "International airport straddling Pasay City and Parañaque City in the Manila metropolitan area",
-    distance: "About 6,700m from the office",
-  },
-  {
-    icon: Landmark,
-    name: "Embassy of Japan in the Philippines",
-    description: "Located in Pasay City, used to apply for visas and obtain various certificates. Safety information sent by email with residence report",
-    distance: "About 5,800m from the office",
-  },
-  {
-    icon: Building2,
-    name: "AIA Tower",
-    description: "Office building housing JETRO (Japan External Trade Organization) and many multinational companies. Exclusive business club on rooftop",
-    distance: "About 230m from the office",
-  },
-  {
-    icon: Building2,
-    name: "Trident Tower",
-    description: "Houses Manila Japanese Association, Chamber of Commerce office, and Manila Japanese Association Clinic with Japanese doctor",
-    distance: "About 750m from the office",
-  },
-  {
-    icon: Store,
-    name: "Greenbelt",
-    description: "Huge shopping mall with first-class brand shops and popular restaurants. Popular spot for businessmen at lunch and dinner",
-    distance: "About 1,000m from the office",
-  },
-  {
-    icon: Trees,
-    name: "Ayala Triangle Park",
-    description: "Large park in the center of Makati CBD with popular restaurants featuring open terrace seats. Many runners jog early morning and evening",
-    distance: "About 350m from the office",
-  },
-  {
-    icon: Utensils,
-    name: "Little Tokyo",
-    description: "The only Japanese town in Metro Manila with Japanese restaurants and grocery stores. Enjoy Japanese food at reasonable prices",
-    distance: "About 1,000m from the office",
-  },
-  {
-    icon: Train,
-    name: "Ayala Railway Station (MRT)",
-    description: "Ayala Station on Manila Metrorail. Directly connected to shopping building. Main route for buses",
-    distance: "About 1,500m from the office",
-  },
-];
-
-const milestones = [
-  {
-    year: "2009",
-    title: "Company Founded",
-    description: "Hero Serviced Office was established in Manila to serve Japanese businesses.",
-  },
-  {
-    year: "2012",
-    title: "Expansion to Makati CBD",
-    description: "Opened our flagship office in Tower 6789 on Ayala Avenue.",
-  },
-  {
-    year: "2015",
-    title: "Virtual Office Launch",
-    description: "Introduced virtual office services for remote businesses.",
-  },
-  {
-    year: "2018",
-    title: "Service Enhancement",
-    description: "Added 24/7 support and enhanced security systems.",
-  },
-  {
-    year: "2023",
-    title: "Digital Transformation",
-    description: "Launched virtual tour and online reservation system.",
-  },
-];
+import { useLanguage } from "../../components/LanguageProvider";
 
 export default function AboutPage() {
+  const { t } = useLanguage();
+
+  const values = [
+    {
+      icon: Target,
+      title: t("about.values.excellence") as string,
+      description: t("about.values.excellenceDesc") as string,
+    },
+    {
+      icon: Shield,
+      title: t("about.values.integrity") as string,
+      description: t("about.values.integrityDesc") as string,
+    },
+    {
+      icon: Users,
+      title: t("about.values.customerFirst") as string,
+      description: t("about.values.customerFirstDesc") as string,
+    },
+    {
+      icon: Globe,
+      title: t("about.values.globalStandards") as string,
+      description: t("about.values.globalStandardsDesc") as string,
+    },
+  ];
+
+  const stats = [
+    { number: "15+", label: t("about.stats.years") as string },
+    { number: "500+", label: t("about.stats.companies") as string },
+    { number: "3", label: t("about.stats.locations") as string },
+    { number: "50+", label: t("about.stats.team") as string },
+  ];
+
+  const locations = [
+    {
+      name: t("about.locations.tower6789") as string,
+      address: t("about.locations.tower6789Address") as string,
+      mapUrl: "https://www.google.com/maps/place/Leopalace21+Philippines+Inc./@14.5568556,121.0168084,16z",
+    },
+    {
+      name: t("about.locations.insularLife") as string,
+      address: t("about.locations.insularLifeAddress") as string,
+      mapUrl: "https://www.google.com/maps/place/Insular+Life+Building,+Ayala+Ave,+Makati,+Metro+Manila",
+    },
+  ];
+
+  const nearbyLandmarks = (t("about.landmarks") as unknown as Array<{
+    icon: any;
+    name: string;
+    description: string;
+    distance: string;
+  }>).map((item, index) => ({
+    icon: [Plane, Landmark, Building2, Building2, Store, Trees, Utensils, Train][index],
+    name: item.name,
+    description: item.description,
+    distance: item.distance,
+  }));
+
+  const milestones = (t("about.milestones") as unknown as Array<{
+    year: string;
+    title: string;
+    description: string;
+  }>).map(item => ({
+    year: item.year,
+    title: item.title,
+    description: item.description,
+  }));
+
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
@@ -156,10 +102,10 @@ export default function AboutPage() {
             className="max-w-3xl"
           >
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-              About HERO Serviced Office
+              {t("about.hero.title") as string}
             </h1>
             <p className="text-xl text-gray-300">
-              Your trusted partner for business expansion into the Philippines since 2009.
+              {t("about.hero.subtitle") as string}
             </p>
           </motion.div>
         </div>
@@ -176,26 +122,17 @@ export default function AboutPage() {
               viewport={{ once: true }}
             >
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-                Your Gateway to Philippine Business Success
+                {t("about.overview.title") as string}
               </h2>
               <div className="space-y-4 text-gray-600">
                 <p>
-                  HERO Serviced Office, Inc. has been at the forefront of providing
-                  premium serviced office solutions in Manila since 2009. We specialize
-                  in supporting Japanese companies expanding their operations into the
-                  Philippines market.
+                  {t("about.overview.p1") as string}
                 </p>
                 <p>
-                  Located in the prestigious Tower 6789 along Ayala Avenue in Makati
-                  City, our offices offer the perfect blend of strategic location and
-                  world-class facilities. We understand the unique challenges faced by
-                  international businesses and provide comprehensive support to ensure
-                  your success.
+                  {t("about.overview.p2") as string}
                 </p>
                 <p>
-                  Our team of bilingual professionals, fluent in both Japanese and
-                  English, ensures seamless communication and operations for your
-                  business in the Philippines.
+                  {t("about.overview.p3") as string}
                 </p>
               </div>
             </motion.div>
@@ -247,11 +184,9 @@ export default function AboutPage() {
               <div className="w-14 h-14 bg-[#1B3A8C] rounded-xl flex items-center justify-center mb-6">
                 <Eye className="w-7 h-7 text-white" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Our Vision</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">{t("about.vision.title") as string}</h3>
               <p className="text-gray-600 leading-relaxed">
-                To be the leading serviced office provider in the Philippines,
-                empowering international businesses to thrive in the Asian market
-                through world-class facilities and exceptional support services.
+                {t("about.vision.description") as string}
               </p>
             </motion.div>
             <motion.div
@@ -264,12 +199,9 @@ export default function AboutPage() {
               <div className="w-14 h-14 bg-[#3B5EA6] rounded-xl flex items-center justify-center mb-6">
                 <Award className="w-7 h-7 text-white" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Our Mission</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">{t("about.mission.title") as string}</h3>
               <p className="text-gray-600 leading-relaxed">
-                To provide flexible, professional office solutions that enable
-                businesses to focus on growth while we handle the operational
-                complexities. We bridge cultural and business gaps for Japanese
-                companies entering the Philippine market.
+                {t("about.mission.description") as string}
               </p>
             </motion.div>
           </div>
@@ -281,10 +213,10 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Our Core Values
+              {t("about.values.title") as string}
             </h2>
             <p className="text-lg text-gray-600">
-              The principles that guide everything we do
+              {t("about.values.subtitle") as string}
             </p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -316,13 +248,13 @@ export default function AboutPage() {
           <div className="text-center max-w-3xl mx-auto mb-16">
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#C5D2EC] rounded-full text-sm text-[#1B3A8C] mb-6">
               <MapPin className="w-4 h-4" />
-              Prime Makati CBD Location
+              {t("about.location.badge") as string}
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Access Map & Surrounding Environment
+              {t("about.location.title") as string}
             </h2>
             <p className="text-lg text-gray-600">
-              Conveniently located in the heart of Makati&apos;s business district
+              {t("about.location.subtitle") as string}
             </p>
           </div>
 
@@ -360,10 +292,10 @@ export default function AboutPage() {
           {/* Surrounding Environment */}
           <div className="text-center max-w-3xl mx-auto mb-12">
             <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
-              Surrounding Environment
+              {t("about.surrounding.title") as string}
             </h3>
             <p className="text-gray-600">
-              Key landmarks and facilities near our offices
+              {t("about.surrounding.subtitle") as string}
             </p>
           </div>
 
@@ -395,32 +327,32 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Why Businesses Trust Us
+              {t("about.whyChooseUs.title") as string}
             </h2>
             <p className="text-lg text-gray-400">
-              We understand the unique needs of international businesses
+              {t("about.whyChooseUs.subtitle") as string}
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             <div className="p-6 bg-white/5 backdrop-blur-sm rounded-2xl">
               <Clock className="w-10 h-10 text-[#5C7ABF] mb-4" />
-              <h3 className="text-xl font-semibold mb-2">Japanese Business Hours</h3>
+              <h3 className="text-xl font-semibold mb-2">{t("about.whyChooseUs.businessHours") as string}</h3>
               <p className="text-gray-400">
-                We align our operations with Japanese business hours for seamless coordination.
+                {t("about.whyChooseUs.businessHoursDesc") as string}
               </p>
             </div>
             <div className="p-6 bg-white/5 backdrop-blur-sm rounded-2xl">
               <Users className="w-10 h-10 text-[#5C7ABF] mb-4" />
-              <h3 className="text-xl font-semibold mb-2">Bilingual Support</h3>
+              <h3 className="text-xl font-semibold mb-2">{t("about.whyChooseUs.bilingualSupport") as string}</h3>
               <p className="text-gray-400">
-                Our team speaks both Japanese and English for effective communication.
+                {t("about.whyChooseUs.bilingualSupportDesc") as string}
               </p>
             </div>
             <div className="p-6 bg-white/5 backdrop-blur-sm rounded-2xl">
               <Shield className="w-10 h-10 text-[#5C7ABF] mb-4" />
-              <h3 className="text-xl font-semibold mb-2">Complete Privacy</h3>
+              <h3 className="text-xl font-semibold mb-2">{t("about.whyChooseUs.privacy") as string}</h3>
               <p className="text-gray-400">
-                Secure facilities with strict confidentiality protocols for your business.
+                {t("about.whyChooseUs.privacyDesc") as string}
               </p>
             </div>
           </div>

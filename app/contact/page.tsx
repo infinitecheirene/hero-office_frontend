@@ -15,59 +15,53 @@ import {
   CheckCircle2,
   AlertCircle,
 } from "lucide-react";
-
-const contactInfo = [
-  {
-    icon: Phone,
-    title: "Phone",
-    details: ["+63 2 8801-3417", "+63 917 123 4567"],
-    action: { label: "Call Now", href: "tel:+63288013417" },
-  },
-  {
-    icon: Mail,
-    title: "Email",
-    details: ["sales@heroph.net", "support@heroph.net"],
-    action: { label: "Send Email", href: "mailto:sales@heroph.net" },
-  },
-  {
-    icon: MapPin,
-    title: "Address",
-    details: [
-      "Tower 6789, Ayala Avenue",
-      "Makati City, Metro Manila",
-      "Philippines 1226",
-    ],
-    action: { label: "Get Directions", href: "https://goo.gl/maps/location" },
-  },
-  {
-    icon: Clock,
-    title: "Business Hours",
-    details: [
-      "Monday - Friday: 9:00 AM - 6:00 PM",
-      "Philippine Time (PHT)",
-      "Closed on weekends and holidays",
-    ],
-  },
-];
-
-const socialLinks = [
-  { icon: Globe, label: "Facebook", href: "https://facebook.com/herophilippines", color: "bg-blue-600" },
-  { icon: Camera, label: "Instagram", href: "https://instagram.com/herophilippines", color: "bg-gradient-to-r from-purple-500 to-pink-500" },
-  { icon: MessageCircle, label: "TikTok", href: "https://tiktok.com/@herophilippines", color: "bg-black" },
-];
-
-const inquiryTypes = [
-  { value: "", label: "Select inquiry type" },
-  { value: "general", label: "General Inquiry" },
-  { value: "office-rental", label: "Office Space Rental" },
-  { value: "meeting-room", label: "Meeting Room Booking" },
-  { value: "virtual-office", label: "Virtual Office Services" },
-  { value: "tour", label: "Schedule a Tour" },
-  { value: "support", label: "Customer Support" },
-  { value: "partnership", label: "Business Partnership" },
-];
+import { useLanguage } from "../../components/LanguageProvider";
 
 export default function ContactPage() {
+  const { t } = useLanguage();
+
+  const contactInfo = [
+    {
+      icon: Phone,
+      title: t("contact.info.phone") as string,
+      details: Array.isArray(t("contact.info.phoneNumbers")) ? t("contact.info.phoneNumbers") as unknown as string[] : [t("contact.info.phoneNumbers") as string],
+      action: { label: t("contact.info.callNow") as string, href: "tel:+63288013417" },
+    },
+    {
+      icon: Mail,
+      title: t("contact.info.email") as string,
+      details: Array.isArray(t("contact.info.emailAddresses")) ? t("contact.info.emailAddresses") as unknown as string[] : [t("contact.info.emailAddresses") as string],
+      action: { label: t("contact.info.sendEmail") as string, href: "mailto:sales@heroph.net" },
+    },
+    {
+      icon: MapPin,
+      title: t("contact.info.address") as string,
+      details: Array.isArray(t("contact.info.addressDetails")) ? t("contact.info.addressDetails") as unknown as string[] : [t("contact.info.addressDetails") as string],
+      action: { label: t("contact.info.getDirections") as string, href: "https://goo.gl/maps/location" },
+    },
+    {
+      icon: Clock,
+      title: t("contact.info.businessHours") as string,
+      details: Array.isArray(t("contact.info.hoursDetails")) ? t("contact.info.hoursDetails") as unknown as string[] : [t("contact.info.hoursDetails") as string],
+    },
+  ];
+
+  const socialLinks = [
+    { icon: Globe, label: "Facebook", href: "https://facebook.com/herophilippines", color: "bg-blue-600" },
+    { icon: Camera, label: "Instagram", href: "https://instagram.com/herophilippines", color: "bg-gradient-to-r from-purple-500 to-pink-500" },
+    { icon: MessageCircle, label: "TikTok", href: "https://tiktok.com/@herophilippines", color: "bg-black" },
+  ];
+
+  const inquiryTypes = [
+    { value: "", label: t("contact.form.selectInquiry") as string },
+    { value: "general", label: t("contact.form.general") as string },
+    { value: "office-rental", label: t("contact.form.officeRental") as string },
+    { value: "meeting-room", label: t("contact.form.meetingRoom") as string },
+    { value: "virtual-office", label: t("contact.form.virtualOffice") as string },
+    { value: "tour", label: t("contact.form.tour") as string },
+    { value: "support", label: t("contact.form.support") as string },
+    { value: "partnership", label: t("contact.form.partnership") as string },
+  ];
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -115,6 +109,30 @@ export default function ContactPage() {
     }));
   };
 
+  const faqData = Array.isArray(t("contact.faq.questions"))
+    ? (t("contact.faq.questions") as unknown as Array<{
+        q: string;
+        a: string;
+      }>)
+    : [
+        {
+          q: "How quickly can I move in?",
+          a: "You can move in immediately after completing the reservation and payment process, usually within 24 hours.",
+        },
+        {
+          q: "Do you offer short-term leases?",
+          a: "Yes, we offer flexible lease terms starting from 1 month for serviced offices.",
+        },
+        {
+          q: "Is there parking available?",
+          a: "Yes, we have dedicated parking spaces for tenants and visitors at Tower 6789.",
+        },
+        {
+          q: "Do you provide Japanese-speaking staff?",
+          a: "Yes, we have bilingual staff fluent in Japanese and English to assist you.",
+        },
+      ];
+
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
@@ -128,11 +146,10 @@ export default function ContactPage() {
             className="text-center max-w-3xl mx-auto"
           >
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-              Contact Us
+              {t("contact.hero.title") as string}
             </h1>
             <p className="text-xl text-gray-300">
-              Get in touch with our team. We&apos;re here to help you find the perfect
-              office solution for your business.
+              {t("contact.hero.subtitle") as string}
             </p>
           </motion.div>
         </div>
@@ -188,10 +205,10 @@ export default function ContactPage() {
               viewport={{ once: true }}
             >
               <h2 className="text-3xl font-bold text-gray-900 mb-2">
-                Send Us a Message
+                {t("contact.form.title") as string}
               </h2>
               <p className="text-gray-600 mb-8">
-                Fill out the form below and we&apos;ll get back to you within 24 hours.
+                {t("contact.form.subtitle") as string}
               </p>
 
               {submitStatus === "success" && (
@@ -202,9 +219,9 @@ export default function ContactPage() {
                 >
                   <CheckCircle2 className="w-5 h-5 text-green-600" />
                   <div>
-                    <p className="font-medium text-green-900">Message sent successfully!</p>
+                    <p className="font-medium text-green-900">{t("contact.form.success") as string}</p>
                     <p className="text-sm text-green-700">
-                      We&apos;ve received your inquiry and will respond shortly.
+                      {t("contact.form.successDesc") as string}
                     </p>
                   </div>
                 </motion.div>
@@ -218,9 +235,9 @@ export default function ContactPage() {
                 >
                   <AlertCircle className="w-5 h-5 text-red-600" />
                   <div>
-                    <p className="font-medium text-red-900">Something went wrong</p>
+                    <p className="font-medium text-red-900">{t("contact.form.error") as string}</p>
                     <p className="text-sm text-red-700">
-                      Please try again or contact us directly.
+                      {t("contact.form.errorDesc") as string}
                     </p>
                   </div>
                 </motion.div>
@@ -233,7 +250,7 @@ export default function ContactPage() {
                       htmlFor="name"
                       className="block text-sm font-medium text-gray-700 mb-2"
                     >
-                      Full Name *
+                      {t("contact.form.name") as string} *
                     </label>
                     <input
                       type="text"
@@ -251,7 +268,7 @@ export default function ContactPage() {
                       htmlFor="email"
                       className="block text-sm font-medium text-gray-700 mb-2"
                     >
-                      Email Address *
+                      {t("contact.form.email") as string} *
                     </label>
                     <input
                       type="email"
@@ -272,7 +289,7 @@ export default function ContactPage() {
                       htmlFor="phone"
                       className="block text-sm font-medium text-gray-700 mb-2"
                     >
-                      Phone Number
+                      {t("contact.form.phone") as string}
                     </label>
                     <input
                       type="tel"
@@ -289,7 +306,7 @@ export default function ContactPage() {
                       htmlFor="company"
                       className="block text-sm font-medium text-gray-700 mb-2"
                     >
-                      Company Name
+                      {t("contact.form.company") as string}
                     </label>
                     <input
                       type="text"
@@ -308,7 +325,7 @@ export default function ContactPage() {
                     htmlFor="inquiryType"
                     className="block text-sm font-medium text-gray-700 mb-2"
                   >
-                    Inquiry Type *
+                    {t("contact.form.inquiryType") as string} *
                   </label>
                   <select
                     id="inquiryType"
@@ -331,7 +348,7 @@ export default function ContactPage() {
                     htmlFor="message"
                     className="block text-sm font-medium text-gray-700 mb-2"
                   >
-                    Your Message *
+                    {t("contact.form.message") as string} *
                   </label>
                   <textarea
                     id="message"
@@ -355,7 +372,7 @@ export default function ContactPage() {
                     className="w-5 h-5 text-[#1B3A8C] border-gray-300 rounded focus:ring-[#1B3A8C]"
                   />
                   <label htmlFor="newsletter" className="text-sm text-gray-600">
-                    Subscribe to our newsletter for updates and promotions
+                    {t("contact.form.newsletter") as string}
                   </label>
                 </div>
 
@@ -367,11 +384,11 @@ export default function ContactPage() {
                   {isSubmitting ? (
                     <>
                       <span className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent" />
-                      Sending...
+                      {t("contact.form.sending") as string}
                     </>
                   ) : (
                     <>
-                      Send Message
+                      {t("contact.form.sendMessage") as string}
                       <Send className="w-5 h-5" />
                     </>
                   )}
@@ -401,11 +418,10 @@ export default function ContactPage() {
               {/* Social Media */}
               <div className="p-6 bg-white rounded-2xl shadow-sm">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                  Connect With Us
+                  {t("contact.social.title") as string}
                 </h3>
                 <p className="text-gray-600 mb-6">
-                  Follow us on social media for the latest updates, office tips, and
-                  exclusive offers.
+                  {t("contact.social.subtitle") as string}
                 </p>
                 <div className="flex items-center gap-4">
                   {socialLinks.map((social) => (
@@ -426,7 +442,7 @@ export default function ContactPage() {
               {/* Quick Links */}
               <div className="p-6 bg-[#C5D2EC]/30 rounded-2xl">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                  Quick Actions
+                  {t("contact.quickActions.title") as string}
                 </h3>
                 <div className="space-y-3">
                   <Link
@@ -437,8 +453,8 @@ export default function ContactPage() {
                       <Clock className="w-5 h-5 text-[#1B3A8C]" />
                     </div>
                     <div>
-                      <p className="font-medium text-gray-900">Make a Reservation</p>
-                      <p className="text-sm text-gray-600">Book your office space</p>
+                      <p className="font-medium text-gray-900">{t("contact.quickActions.reservation") as string}</p>
+                      <p className="text-sm text-gray-600">{t("contact.quickActions.reservationDesc") as string}</p>
                     </div>
                   </Link>
                   <Link
@@ -449,8 +465,8 @@ export default function ContactPage() {
                       <MapPin className="w-5 h-5 text-[#3B5EA6]" />
                     </div>
                     <div>
-                      <p className="font-medium text-gray-900">Take Virtual Tour</p>
-                      <p className="text-sm text-gray-600">Explore our facilities</p>
+                      <p className="font-medium text-gray-900">{t("contact.quickActions.virtualTour") as string}</p>
+                      <p className="text-sm text-gray-600">{t("contact.quickActions.virtualTourDesc") as string}</p>
                     </div>
                   </Link>
                 </div>
@@ -465,31 +481,14 @@ export default function ContactPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Frequently Asked Questions
+              {t("contact.faq.title") as string}
             </h2>
             <p className="text-gray-600">
-              Find quick answers to common questions
+              {t("contact.faq.subtitle") as string}
             </p>
           </div>
           <div className="grid md:grid-cols-2 gap-6">
-            {[
-              {
-                q: "How quickly can I move in?",
-                a: "You can move in immediately after completing the reservation and payment process, usually within 24 hours.",
-              },
-              {
-                q: "Do you offer short-term leases?",
-                a: "Yes, we offer flexible lease terms starting from 1 month for serviced offices.",
-              },
-              {
-                q: "Is there parking available?",
-                a: "Yes, we have dedicated parking spaces for tenants and visitors at Tower 6789.",
-              },
-              {
-                q: "Do you provide Japanese-speaking staff?",
-                a: "Yes, we have bilingual staff fluent in Japanese and English to assist you.",
-              },
-            ].map((faq, index) => (
+            {faqData.map((faq, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 20 }}

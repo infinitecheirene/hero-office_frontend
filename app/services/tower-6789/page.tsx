@@ -2,7 +2,9 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import {
+  InfoIcon,
   Building2,
   Users,
   Briefcase,
@@ -25,19 +27,6 @@ import {
 } from "lucide-react";
 
 const officeTypes = [
-  {
-    id: "private-room",
-    name: "Private Room Space",
-    icon: Building2,
-    description: "Fully equipped private offices for your team",
-    details: [
-      "49 private rooms available",
-      "Accommodates up to 17 people",
-      "Complete with desks, chairs, cabinets",
-      "Internet access included",
-    ],
-    note: "Prices vary depending on layout. Initial costs include contract fee, security deposit, first month usage fee, common service fee, security card fee, and tax.",
-  },
   {
     id: "shared-office",
     name: "Shared Office",
@@ -113,12 +102,6 @@ const amenities = [
   { icon: FileText, title: "Fixtures Included", description: "Desks, chairs, cabinets all provided" },
 ];
 
-const highlights = [
-  { icon: Building2, title: "23rd Floor", description: "Premium location in Tower 6789" },
-  { icon: Shield, title: "PEZA Certified", description: "Tax incentives for foreign investors" },
-  { icon: Clock, title: "Weekday A/C", description: "Air conditioning 8:00-20:00 weekdays" },
-];
-
 export default function Tower6789Page() {
   return (
     <div className="min-h-screen">
@@ -132,10 +115,6 @@ export default function Tower6789Page() {
             transition={{ duration: 0.5 }}
             className="text-center max-w-3xl mx-auto"
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-sm mb-6">
-              <BadgeCheck className="w-4 h-4" />
-              PEZA Certified Building
-            </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
               Tower 6789 Makati
             </h1>
@@ -149,32 +128,23 @@ export default function Tower6789Page() {
       {/* Location Highlights */}
       <section className="py-12 bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-3 gap-6">
-            {highlights.map((item, index) => (
-              <motion.div
-                key={item.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                className="flex items-center gap-4 p-6 bg-gray-50 rounded-xl"
-              >
-                <div className="w-12 h-12 bg-[#C5D2EC]/50 rounded-xl flex items-center justify-center">
-                  <item.icon className="w-6 h-6 text-[#1B3A8C]" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900">{item.title}</h3>
-                  <p className="text-sm text-gray-600">{item.description}</p>
-                </div>
-              </motion.div>
-            ))}
+          <div className="flex items-center gap-4">
+            <Image src="/peza.png" alt="PEZA Logo" width={100} height={100} />
+            <div className="flex flex-col gap-3">
+              <h1 className="text-xl font-bold text-gray-900">
+                The building where the service office is located (TOWER6789) is a PEZA certified building.
+              </h1>
+              <p className="text-gray-500">
+                In districts certified by the Philippine Economic Zone Authority (PEZA), as part of preferential treatment for foreign investment, depending on the type of business, you can receive preferential treatment such as exemption from corporate income tax, customs duty, and value added tax.
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Base Overview */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-20 bg-gray-50 border-b border-gray-200">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
@@ -216,23 +186,6 @@ export default function Tower6789Page() {
                   </div>
                 </div>
               </div>
-
-              {/* PEZA Badge */}
-              <div className="mt-8 p-6 bg-green-50 border border-green-200 rounded-2xl">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                    <BadgeCheck className="w-6 h-6 text-green-600" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-green-900 mb-2">PEZA Certified Building</h3>
-                    <p className="text-green-700 text-sm">
-                      The building where our service office is located is PEZA certified.
-                      Foreign investment companies can receive preferential treatment such as
-                      exemption from corporate income tax, customs duty, and value added tax.
-                    </p>
-                  </div>
-                </div>
-              </div>
             </motion.div>
             <motion.div
               initial={{ opacity: 0, x: 20 }}
@@ -270,8 +223,16 @@ export default function Tower6789Page() {
             <p className="text-lg text-gray-600">
               Choose the perfect workspace solution for your business needs
             </p>
+
+            <div className="p-4 my-4 bg-yellow-50 rounded-xl">
+              <p className="text-sm text-yellow-800">
+                <strong>Note: </strong>
+                Initial costs include contract fee, security deposit, first month usage fee, common service fee, security card fee, and tax.
+              </p>
+            </div>
           </div>
-          <div className="grid md:grid-cols-2 gap-8">
+
+          <div className="grid md:grid-cols-3 gap-8">
             {officeTypes.map((type, index) => (
               <motion.div
                 key={type.id}
@@ -279,8 +240,17 @@ export default function Tower6789Page() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-lg transition-shadow"
+                className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-lg transition-shadow relative"
               >
+                <div className="absolute top-6 right-6">
+                  <div className="relative group">
+                    <InfoIcon className="w-5 h-5 text-gray-400 hover:text-gray-600 cursor-help" />
+                    <div className="absolute bottom-full right-0 mb-2 px-3 py-1.5 bg-gray-900 text-white text-xs rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                      Please contact us for details.
+                      <div className="absolute top-full right-0 border-4 border-transparent border-t-gray-900" />
+                    </div>
+                  </div>
+                </div>
                 <div className="flex items-center gap-4 mb-6">
                   <div className="w-14 h-14 bg-[#C5D2EC]/50 rounded-xl flex items-center justify-center">
                     <type.icon className="w-7 h-7 text-[#1B3A8C]" />
@@ -290,7 +260,7 @@ export default function Tower6789Page() {
                     <p className="text-gray-600">{type.description}</p>
                   </div>
                 </div>
-                <ul className="space-y-3 mb-6">
+                <ul className="space-y-3">
                   {type.details.map((detail, i) => (
                     <li key={i} className="flex items-start gap-3">
                       <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
@@ -298,11 +268,6 @@ export default function Tower6789Page() {
                     </li>
                   ))}
                 </ul>
-                <div className="p-4 bg-yellow-50 rounded-xl">
-                  <p className="text-sm text-yellow-800">
-                    <strong>Note:</strong> {type.note}
-                  </p>
-                </div>
               </motion.div>
             ))}
           </div>
@@ -310,7 +275,7 @@ export default function Tower6789Page() {
       </section>
 
       {/* Facilities & Services */}
-      <section className="py-20 bg-white">
+      <section className="pb-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
@@ -328,7 +293,7 @@ export default function Tower6789Page() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="p-6 bg-gray-50 rounded-2xl hover:bg-[#C5D2EC]/30 transition-colors"
+                className="p-6 bg-white rounded-2xl hover:bg-[#C5D2EC]/30 transition-colors"
               >
                 <div className="w-12 h-12 bg-[#C5D2EC]/50 rounded-xl flex items-center justify-center mb-4">
                   <facility.icon className="w-6 h-6 text-[#1B3A8C]" />
@@ -342,13 +307,13 @@ export default function Tower6789Page() {
       </section>
 
       {/* Amenities */}
-      <section className="py-20 bg-gray-900 text-white">
+      <section className="pb-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               Included Amenities
             </h2>
-            <p className="text-lg text-gray-400">
+            <p className="text-lg text-gray-600">
               Premium features for all tenants
             </p>
           </div>
@@ -360,11 +325,13 @@ export default function Tower6789Page() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="p-6 bg-white/5 backdrop-blur-sm rounded-2xl"
+                className="p-6 bg-white rounded-2xl hover:bg-[#C5D2EC]/30 transition-colors"
               >
-                <amenity.icon className="w-8 h-8 text-[#8FA8D6] mb-4" />
-                <h3 className="font-semibold mb-2">{amenity.title}</h3>
-                <p className="text-gray-400 text-sm">{amenity.description}</p>
+                <div className="flex items-center gap-3">
+                  <amenity.icon className="w-8 h-8 text-[#8FA8D6] mb-4" />
+                  <h3 className="font-semibold text-gray-900 mb-2">{amenity.title}</h3>
+                </div>
+                <p className="text-gray-600 text-sm">{amenity.description}</p>
               </motion.div>
             ))}
           </div>
@@ -372,12 +339,12 @@ export default function Tower6789Page() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-[#C5D2EC]/30">
+      <section className="py-20 bg-gradient-to-r from-[#1B3A8C] to-[#3B5EA6]">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
             Service Office Inquiry
           </h2>
-          <p className="text-lg text-gray-600 mb-8">
+          <p className="text-lg text-gray-100 mb-8">
             Contact us to learn more about our office spaces at Tower 6789
           </p>
 
@@ -412,37 +379,11 @@ export default function Tower6789Page() {
           </div>
           <Link
             href="/contact"
-            className="inline-flex items-center gap-2 px-8 py-4 bg-[#1B3A8C] text-white rounded-full font-semibold hover:bg-[#3B5EA6] transition-colors"
+            className="inline-flex items-center gap-2 px-8 py-4 bg-white text-[#1B3A8C] rounded-full font-semibold hover:bg-[#3B5EA6] transition-colors"
           >
             Send Inquiry
             <ArrowRight className="w-5 h-5" />
           </Link>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-[#1B3A8C] to-[#3B5EA6]">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
-            Ready to Get Started?
-          </h2>
-          <p className="text-xl text-white/90 mb-8">
-            Take a virtual tour or schedule a visit to see our facilities in person
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              href="/virtual-tour"
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-[#1B3A8C] rounded-full font-semibold hover:bg-gray-100 transition-colors"
-            >
-              Take Virtual Tour
-            </Link>
-            <Link
-              href="/reservation"
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-transparent border-2 border-white text-white rounded-full font-semibold hover:bg-white/10 transition-colors"
-            >
-              Make a Reservation
-            </Link>
-          </div>
         </div>
       </section>
     </div>

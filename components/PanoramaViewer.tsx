@@ -1,14 +1,14 @@
 "use client";
 
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useState, useRef, useEffect } from "react";
+import { motion, useMotionValue, useTransform, useSpring } from "framer-motion";
 import { MapPin, ChevronLeft, ChevronRight, Maximize2 } from "lucide-react";
 
 const scenes = [
   {
     id: "lobby",
     name: "Main Lobby",
-    image: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1600&q=80",
+    image: "/360-office.jpg",
     hotspots: [
       { x: 30, y: 50, label: "Reception Desk" },
       { x: 70, y: 45, label: "Waiting Area" },
@@ -17,7 +17,7 @@ const scenes = [
   {
     id: "office",
     name: "Premium Office Suite",
-    image: "https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=1600&q=80",
+    image: "/360-office.jpg",
     hotspots: [
       { x: 25, y: 40, label: "Workstations" },
       { x: 75, y: 35, label: "City View" },
@@ -26,7 +26,7 @@ const scenes = [
   {
     id: "meeting",
     name: "Executive Boardroom",
-    image: "https://images.unsplash.com/photo-1517502884422-41eaead166d4?w=1600&q=80",
+    image: "/360-office.jpg",
     hotspots: [
       { x: 50, y: 40, label: "Video Wall" },
       { x: 30, y: 60, label: "Conference Table" },
@@ -38,6 +38,12 @@ export default function PanoramaViewer() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedHotspot, setSelectedHotspot] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isDragging, setIsDragging] = useState(false);
+  
+  const containerRef = useRef<HTMLDivElement>(null);
+  const startX = useRef(0);
+  const currentX = useMotionValue(0);
+  const springX = useSpring(currentX, { stiffness: 300, damping: 30 });
 
   const currentScene = scenes[currentIndex];
 
@@ -51,8 +57,58 @@ export default function PanoramaViewer() {
     setCurrentIndex((prev) => (prev - 1 + scenes.length) % scenes.length);
   };
 
+  const handleMouseDown = (e: React.MouseEvent) => {
+    setIsDragging(true);
+    startX.current = e.clientX - currentX.get();
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging) return;
+    const newX = e.clientX - startX.current;
+    const maxPan = 500;
+    currentX.set(Math.max(-maxPan, Math.min(maxPan, newX)));
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  const handleMouseLeave = () => {
+    setIsDragging(false);
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setIsDragging(true);
+    startX.current = e.touches[0].clientX - currentX.get();
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!isDragging) return;
+    const newX = e.touches[0].clientX - startX.current;
+    const maxPan = 500;
+    currentX.set(Math.max(-maxPan, Math.min(maxPan, newX)));
+  };
+
+  const handleTouchEnd = () => {
+    setIsDragging(false);
+  };
+
+  useEffect(() => {
+    currentX.set(0);
+  }, [currentScene.id, currentX]);
+
   return (
-    <div className="relative w-full h-[600px] lg:h-[700px] bg-gray-900 rounded-2xl overflow-hidden">
+    <div 
+      ref={containerRef}
+      className="relative w-full h-[600px] lg:h-[700px] bg-gray-900 rounded-2xl overflow-hidden cursor-grab active:cursor-grabbing select-none"
+      onMouseDown={handleMouseDown}
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
+      onMouseLeave={handleMouseLeave}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+    >
       {/* Loading State */}
       {isLoading && (
         <div className="absolute inset-0 bg-gray-900 flex items-center justify-center z-20">
@@ -63,18 +119,21 @@ export default function PanoramaViewer() {
         </div>
       )}
 
-      {/* Scene Image */}
-      <motion.div
-        key={currentScene.id}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: isLoading ? 0 : 1 }}
+      {/* Panoramic Image */}
+      <motion.div 
         className="absolute inset-0"
+        style={{ x: springX }}
+        drag="x"
+        dragConstraints={{ left: -500, right: 500 }}
+        dragElastic={0.1}
       >
         <img
           src={currentScene.image}
           alt={currentScene.name}
-          className="w-full h-full object-cover"
+          className="w-[200%] h-full object-cover"
+          style={{ marginLeft: '-50%' }}
           onLoad={() => setIsLoading(false)}
+          draggable={false}
         />
       </motion.div>
 
@@ -87,7 +146,10 @@ export default function PanoramaViewer() {
             animate={{ scale: 1 }}
             transition={{ delay: i * 0.2 }}
             className="absolute z-10 group"
-            style={{ left: `${hotspot.x}%`, top: `${hotspot.y}%` }}
+            style={{
+              left: `calc(${hotspot.x}% + ${springX.get() * 0.5}px)`,
+              top: `${hotspot.y}%`,
+            }}
             onClick={() =>
               setSelectedHotspot(
                 selectedHotspot === hotspot.label ? null : hotspot.label
@@ -138,10 +200,7 @@ export default function PanoramaViewer() {
           {scenes.map((scene, i) => (
             <button
               key={scene.id}
-              onClick={() => {
-                setIsLoading(true);
-                setCurrentIndex(i);
-              }}
+              onClick={() => setCurrentIndex(i)}
               className={`flex-1 h-16 rounded-lg overflow-hidden border-2 transition-colors ${
                 i === currentIndex ? "border-blue-500" : "border-transparent"
               }`}
@@ -166,7 +225,7 @@ export default function PanoramaViewer() {
       {/* Instructions */}
       <div className="absolute top-4 left-4 bg-black/50 backdrop-blur-sm rounded-lg px-3 py-2 text-white text-sm">
         <MapPin className="w-4 h-4 inline mr-1" />
-        Click hotspots for details
+        Drag to rotate • Click hotspots for details
       </div>
     </div>
   );

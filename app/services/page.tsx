@@ -25,17 +25,19 @@ import {
   Calendar,
   Globe,
 } from "lucide-react";
-
-const moveInSteps = [
-  { step: 1, title: "Inquiry", description: "Contact us by phone or inquiry form" },
-  { step: 2, title: "Introduction", description: "Staff will introduce the office and provide estimates" },
-  { step: 3, title: "Application", description: "Submit required documents as instructed" },
-  { step: 4, title: "Examination", description: "Document review (up to 5 business days)" },
-  { step: 5, title: "Contract", description: "Sign contract and deposit initial fees" },
-  { step: 6, title: "Start Using", description: "Staff explains facilities and provides room key" },
-];
+import { useLanguage } from "../../components/LanguageProvider";
 
 export default function ServicesPage() {
+  const { t } = useLanguage();
+
+  const moveInSteps = [
+    { step: 1, title: t("services.moveInFlow.step1") as string, description: t("services.moveInFlow.step1Desc") as string },
+    { step: 2, title: t("services.moveInFlow.step2") as string, description: t("services.moveInFlow.step2Desc") as string },
+    { step: 3, title: t("services.moveInFlow.step3") as string, description: t("services.moveInFlow.step3Desc") as string },
+    { step: 4, title: t("services.moveInFlow.step4") as string, description: t("services.moveInFlow.step4Desc") as string },
+    { step: 5, title: t("services.moveInFlow.step5") as string, description: t("services.moveInFlow.step5Desc") as string },
+    { step: 6, title: t("services.moveInFlow.step6") as string, description: t("services.moveInFlow.step6Desc") as string },
+  ];
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
@@ -49,7 +51,7 @@ export default function ServicesPage() {
             className="text-center max-w-3xl mx-auto"
           >
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-              Office Guidance & Services
+              {t("services.hero.title") as string}
             </h1>
           </motion.div>
         </div>
@@ -60,10 +62,10 @@ export default function ServicesPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Our Locations
+              {t("services.locations.title") as string}
             </h2>
             <p className="text-lg text-gray-600">
-              Choose the Hero PH location that best suits your business needs
+              {t("services.locations.subtitle") as string}
             </p>
           </div>
           <div className="grid md:grid-cols-2 gap-8">
@@ -73,43 +75,47 @@ export default function ServicesPage() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
               viewport={{ once: true }}
-              className="p-8 bg-white rounded-2xl shadow-sm hover:shadow-lg transition-shadow"
+              className="bg-white rounded-2xl shadow-sm hover:shadow-lg transition-shadow overflow-hidden"
             >
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 bg-[#1B3A8C] rounded-xl flex items-center justify-center">
-                  <Building2 className="w-6 h-6 text-white" />
+              <div className="p-6 border-b border-gray-100">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-12 h-12 bg-[#1B3A8C] rounded-xl flex items-center justify-center flex-shrink-0">
+                    <Building2 className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-900">{t("services.locations.tower6789") as string}</h3>
+                    <p className="text-sm text-[#1B3A8C] font-medium">{t("services.locations.tower6789Location") as string}</p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="text-xl font-bold text-gray-900">Tower 6789</h3>
-                  <p className="text-sm text-[#1B3A8C] font-medium">Makati CBD</p>
-                </div>
+                <p className="text-gray-600 text-sm">{t("services.locations.tower6789Address") as string}</p>
               </div>
-              <p className="text-gray-600 mb-4">23rd Floor, 6789 Ayala Avenue, Makati City</p>
-              <ul className="space-y-2 mb-6">
-                <li className="flex items-center gap-2 text-sm text-gray-700">
-                  <CheckCircle2 className="w-4 h-4 text-green-500" />
-                  49 private rooms (up to 17 people)
-                </li>
-                <li className="flex items-center gap-2 text-sm text-gray-700">
-                  <CheckCircle2 className="w-4 h-4 text-green-500" />
-                  PEZA certified building
-                </li>
-                <li className="flex items-center gap-2 text-sm text-gray-700">
-                  <CheckCircle2 className="w-4 h-4 text-green-500" />
-                  A/C weekdays 8:00-20:00
-                </li>
-                <li className="flex items-center gap-2 text-sm text-gray-700">
-                  <CheckCircle2 className="w-4 h-4 text-green-500" />
-                  Meeting rooms up to 10 people
-                </li>
-              </ul>
-              <Link
-                href="/services/tower-6789"
-                className="inline-flex items-center gap-2 w-full justify-center px-6 py-3 bg-[#1B3A8C] text-white rounded-xl font-semibold hover:bg-[#3B5EA6] transition-colors"
-              >
-                View Tower 6789 Makati
-                <ChevronRight className="w-5 h-5" />
-              </Link>
+              <div className="p-6">
+                <ul className="space-y-3 mb-6">
+                  <li className="flex items-start gap-3 text-sm text-gray-700">
+                    <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                    <span>{t("services.locations.tower6789Feature1") as string}</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-sm text-gray-700">
+                    <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                    <span>{t("services.locations.tower6789Feature2") as string}</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-sm text-gray-700">
+                    <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                    <span>{t("services.locations.tower6789Feature3") as string}</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-sm text-gray-700">
+                    <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                    <span>{t("services.locations.tower6789Feature4") as string}</span>
+                  </li>
+                </ul>
+                <Link
+                  href="/services/tower-6789"
+                  className="inline-flex items-center gap-2 w-full justify-center px-6 py-3 bg-[#1B3A8C] text-white rounded-xl font-semibold hover:bg-[#3B5EA6] transition-colors"
+                >
+                  {t("services.locations.tower6789Cta") as string}
+                  <ChevronRight className="w-5 h-5" />
+                </Link>
+              </div>
             </motion.div>
 
             {/* Insular Life Building Card */}
@@ -118,51 +124,51 @@ export default function ServicesPage() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
               viewport={{ once: true }}
-              className="p-8 bg-white rounded-2xl shadow-sm hover:shadow-lg transition-shadow"
+              className="bg-white rounded-2xl shadow-sm hover:shadow-lg transition-shadow overflow-hidden"
             >
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 bg-[#3B5EA6] rounded-xl flex items-center justify-center">
-                  <Building2 className="w-6 h-6 text-white" />
+              <div className="p-6 border-b border-gray-100">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-12 h-12 bg-[#1B3A8C] rounded-xl flex items-center justify-center flex-shrink-0">
+                    <Building2 className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-900">{t("services.locations.insularLife") as string}</h3>
+                    <p className="text-sm text-[#3B5EA6] font-medium">{t("services.locations.insularLifeLocation") as string}</p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="text-xl font-bold text-gray-900">Insular Life Building</h3>
-                  <p className="text-sm text-[#3B5EA6] font-medium">Ayala & Paseo de Roxas</p>
-                </div>
+                <p className="text-gray-600 text-sm">{t("services.locations.insularLifeAddress") as string}</p>
               </div>
-              <p className="text-gray-600 mb-4">11th Floor, 6781 Ayala Avenue corner Paseo de Roxas, Makati</p>
-              <ul className="space-y-2 mb-6">
-                <li className="flex items-center gap-2 text-sm text-gray-700">
-                  <CheckCircle2 className="w-4 h-4 text-green-500" />
-                  49 private rooms (up to 35 people)
-                </li>
-                <li className="flex items-center gap-2 text-sm text-gray-700">
-                  <CheckCircle2 className="w-4 h-4 text-green-500" />
-                  PEZA certified building
-                </li>
-                <li className="flex items-center gap-2 text-sm text-gray-700">
-                  <Calendar className="w-4 h-4 text-[#3B5EA6]" />
-                  Opened April 2019
-                </li>
-                <li className="flex items-center gap-2 text-sm text-gray-700">
-                  <CheckCircle2 className="w-4 h-4 text-green-500" />
-                  24-hour air conditioning
-                </li>
-                <li className="flex items-center gap-2 text-sm text-gray-700">
-                  <CheckCircle2 className="w-4 h-4 text-green-500" />
-                  Meeting rooms up to 20 people
-                </li>
-                <li className="flex items-center gap-2 text-sm text-gray-700">
-                  <CheckCircle2 className="w-4 h-4 text-green-500" />
-                  Mailbox & locker room included
-                </li>
-              </ul>
-              <Link
-                href="/services/insular-life"
-                className="inline-flex items-center gap-2 w-full justify-center px-6 py-3 bg-[#3B5EA6] text-white rounded-xl font-semibold hover:bg-[#5C7ABF] transition-colors"
-              >
-                View Insular Life Building
-                <ChevronRight className="w-5 h-5" />
-              </Link>
+              <div className="p-6">
+                <ul className="space-y-3 mb-6">
+                  <li className="flex items-start gap-3 text-sm text-gray-700">
+                    <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                    <span>{t("services.locations.insularLifeFeature1") as string}</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-sm text-gray-700">
+                    <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                    <span>{t("services.locations.insularLifeFeature2") as string}</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-sm text-gray-700">
+                    <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                    <span>{t("services.locations.insularLifeFeature4") as string}</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-sm text-gray-700">
+                    <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                    <span>{t("services.locations.insularLifeFeature5") as string}</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-sm text-gray-700">
+                    <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                    <span>{t("services.locations.insularLifeFeature6") as string}</span>
+                  </li>
+                </ul>
+                <Link
+                  href="/services/insular-life"
+                  className="inline-flex items-center gap-2 w-full justify-center px-6 py-3 bg-[#1B3A8C] text-white rounded-xl font-semibold hover:bg-[#3B5EA6] transition-colors"
+                >
+                  {t("services.locations.insularLifeCta") as string}
+                  <ChevronRight className="w-5 h-5" />
+                </Link>
+              </div>
             </motion.div>
           </div>
         </div>
@@ -173,10 +179,10 @@ export default function ServicesPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Flow Until Moving In
+              {t("services.moveInFlow.title") as string}
             </h2>
             <p className="text-lg text-gray-600">
-              Simple 6-step process to start using our office
+              {t("services.moveInFlow.subtitle") as string}
             </p>
           </div>
           <div className="relative">
@@ -213,14 +219,14 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      {/* Contact Section */}
-      <section className="py-20 bg-[#C5D2EC]/30">
+      {/* CTA Section */}
+      <section className="py-20 bg-gradient-to-r from-[#1B3A8C] to-[#3B5EA6]">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
             Service Office Inquiry
           </h2>
-          <p className="text-lg text-gray-600 mb-8">
-            Contact us to learn more about our office spaces and services
+          <p className="text-lg text-gray-100 mb-8">
+            Contact us to learn more about our office spaces at Tower 6789
           </p>
 
           <div className="grid md:grid-cols-2 gap-6 mb-8">
@@ -228,7 +234,7 @@ export default function ServicesPage() {
               href="tel:+63288013417"
               className="flex items-center justify-center gap-3 p-6 bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow"
             >
-              <div className="w-12 h-12 bg-[#C5D2EC] rounded-full flex items-center justify-center">
+              <div className="w-12 h-12 bg-[#C5D2EC]/50 rounded-full flex items-center justify-center">
                 <Phone className="w-6 h-6 text-[#1B3A8C]" />
               </div>
               <div className="text-left">
@@ -242,7 +248,7 @@ export default function ServicesPage() {
               href="mailto:sales@heroph.net"
               className="flex items-center justify-center gap-3 p-6 bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow"
             >
-              <div className="w-12 h-12 bg-[#C5D2EC] rounded-full flex items-center justify-center">
+              <div className="w-12 h-12 bg-[#C5D2EC]/50 rounded-full flex items-center justify-center">
                 <Mail className="w-6 h-6 text-[#1B3A8C]" />
               </div>
               <div className="text-left">
@@ -254,37 +260,11 @@ export default function ServicesPage() {
           </div>
           <Link
             href="/contact"
-            className="inline-flex items-center gap-2 px-8 py-4 bg-[#1B3A8C] text-white rounded-full font-semibold hover:bg-[#3B5EA6] transition-colors"
+            className="inline-flex items-center gap-2 px-8 py-4 bg-white text-[#1B3A8C] rounded-full font-semibold hover:bg-[#3B5EA6] transition-colors"
           >
             Send Inquiry
             <ArrowRight className="w-5 h-5" />
           </Link>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-[#1B3A8C] to-[#3B5EA6]">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
-            Ready to Get Started?
-          </h2>
-          <p className="text-xl text-white/90 mb-8">
-            Take a virtual tour or schedule a visit to see our facilities in person
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              href="/virtual-tour"
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-[#1B3A8C] rounded-full font-semibold hover:bg-gray-100 transition-colors"
-            >
-              Take Virtual Tour
-            </Link>
-            <Link
-              href="/reservation"
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-transparent border-2 border-white text-white rounded-full font-semibold hover:bg-white/10 transition-colors"
-            >
-              Make a Reservation
-            </Link>
-          </div>
         </div>
       </section>
     </div>
