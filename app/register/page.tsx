@@ -3,43 +3,100 @@
 import { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import Navigation from "@/components/Navigation";
 import {
-  Building2,
   User,
   Mail,
   Lock,
   Eye,
   EyeOff,
-  Briefcase,
+  ArrowLeft,
   ArrowRight,
-  CheckCircle2,
 } from "lucide-react";
+import { useToast } from "@/components/Toast";
 
 export default function SignupPage() {
+  const { showToast } = useToast();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    company: "",
+    phone: "",
     password: "",
-    confirmPassword: "",
+    password_confirmation: "",
     agreeTerms: false,
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Client-side validation
+    if (formData.password !== formData.password_confirmation) {
+      showToast('Passwords do not match', 'error');
+      return;
+    }
+
+    if (formData.password.length < 8) {
+      showToast('Password must be at least 8 characters long', 'error');
+      return;
+    }
+
+    if (!formData.agreeTerms) {
+      showToast('Please agree to the Terms of Service and Privacy Policy', 'error');
+      return;
+    }
+
     setIsLoading(true);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    setIsLoading(false);
-    // Handle signup logic here
+
+    try {
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        showToast('Registration successful! Redirecting to login...', 'success');
+        setTimeout(() => {
+          window.location.href = '/login';
+        }, 1500);
+      } else {
+        // Show detailed error message
+        if (data.errors && Object.keys(data.errors).length > 0) {
+          const errorMessages = Object.entries(data.errors)
+            .map(([field, messages]) => {
+              const messageArray = Array.isArray(messages) ? messages : [messages];
+              return `${field}: ${messageArray.join(', ')}`;
+            })
+            .join('\n');
+          showToast(errorMessages, 'error');
+        } else {
+          showToast(data.message || 'Registration failed', 'error');
+        }
+      }
+    } catch (error) {
+      showToast('An error occurred. Please try again.', 'error');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F5F3] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#F5F5F3] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative">
+      {/* Back to Home Button */}
+      <Link
+        href="/"
+        className="absolute top-8 left-8 flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
+      >
+        <ArrowLeft className="w-5 h-5" />
+        <span className="text-sm font-medium">Back to Home</span>
+      </Link>
+
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -57,7 +114,7 @@ export default function SignupPage() {
         </div>
 
         {/* Form */}
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+        <form className="mt-8 space-y-6 text-gray-900" onSubmit={handleSubmit}>
           <div className="space-y-4">
             {/* Name */}
             <div>
@@ -105,24 +162,24 @@ export default function SignupPage() {
               </div>
             </div>
 
-            {/* Company */}
+            {/* Phone */}
             <div>
-              <label htmlFor="company" className="block text-sm font-medium text-gray-700 mb-2">
-                Company Name
+              <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
+                Phone Number
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Briefcase className="h-5 w-5 text-gray-400" />
+                  <User className="h-5 w-5 text-gray-400" />
                 </div>
                 <input
-                  id="company"
-                  name="company"
-                  type="text"
-                  autoComplete="organization"
-                  value={formData.company}
-                  onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+                  id="phone"
+                  name="phone"
+                  type="tel"
+                  autoComplete="tel"
+                  value={formData.phone}
+                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                   className="appearance-none block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1B3A8C] focus:border-transparent transition-all"
-                  placeholder="Your Company"
+                  placeholder="09123456789"
                 />
               </div>
             </div>
@@ -176,8 +233,8 @@ export default function SignupPage() {
                   type={showConfirmPassword ? "text" : "password"}
                   autoComplete="new-password"
                   required
-                  value={formData.confirmPassword}
-                  onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+                  value={formData.password_confirmation}
+                  onChange={(e) => setFormData({ ...formData, password_confirmation: e.target.value })}
                   className="appearance-none block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-xl placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1B3A8C] focus:border-transparent transition-all"
                   placeholder="Confirm your password"
                 />
@@ -248,13 +305,6 @@ export default function SignupPage() {
             Sign in
           </Link>
         </p>
-
-        {/* Back to home */}
-        <div className="text-center">
-          <Link href="/" className="text-sm text-gray-500 hover:text-gray-700">
-            ← Back to homepage
-          </Link>
-        </div>
       </motion.div>
     </div>
   );

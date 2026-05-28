@@ -4,16 +4,19 @@ import { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import {
-  Building2,
   Mail,
   Lock,
   Eye,
   EyeOff,
+  ArrowLeft,
   ArrowRight,
-  CheckCircle2,
 } from "lucide-react";
+import { useToast } from "@/components/Toast";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function LoginPage() {
+  const { showToast } = useToast();
+  const { login } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -24,15 +27,57 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!formData.email || !formData.password) {
+      showToast('Please fill in all fields', 'error');
+      return;
+    }
+
     setIsLoading(true);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    setIsLoading(false);
-    // Handle login logic here
+
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        login(data.user, data.token);
+        showToast('Login successful!', 'success');
+        window.location.href = '/';
+      } else {
+        if (data.error === 'email_not_verified') {
+          showToast(data.message, 'error');
+        } else {
+          showToast(data.message || 'Login failed', 'error');
+        }
+      }
+    } catch (error) {
+      showToast('An error occurred. Please try again.', 'error');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F5F3] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#F5F5F3] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative">
+      {/* Back to Home Button */}
+      <Link
+        href="/"
+        className="absolute top-8 left-8 flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
+      >
+        <ArrowLeft className="w-5 h-5" />
+        <span className="text-sm font-medium">Back to Home</span>
+      </Link>
+
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -158,7 +203,7 @@ export default function LoginPage() {
         {/* Sign up link */}
         <p className="text-center text-sm text-gray-600">
           Don&apos;t have an account?{" "}
-          <Link href="/signup" className="font-medium text-[#1B3A8C] hover:text-[#3B5EA6]">
+          <Link href="/register" className="font-medium text-[#1B3A8C] hover:text-[#3B5EA6]">
             Sign up
           </Link>
         </p>

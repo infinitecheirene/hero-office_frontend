@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Navigation from "../components/Navigation";
-import Footer from "../components/Footer";
+import ClientLayout from "./ClientLayout";
 import { LanguageProvider } from "../components/LanguageProvider";
+import { ToastProvider } from "../components/Toast";
+import { AuthProvider } from "@/contexts/AuthContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -323,11 +324,13 @@ export default function RootLayout({
         <meta name="MobileOptimized" content="320" />
       </head>
       <body className="min-h-full flex flex-col">
-        <LanguageProvider>
-          <Navigation />
-          <main className="flex-1">{children}</main>
-          <Footer />
-        </LanguageProvider>
+        <AuthProvider>
+          <LanguageProvider>
+            <ToastProvider>
+              <ClientLayout>{children}</ClientLayout>
+            </ToastProvider>
+          </LanguageProvider>
+        </AuthProvider>
       </body>
     </html>
   );

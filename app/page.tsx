@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
+import Image from 'next/image'
+import { useState, useEffect } from 'react'
 import {
   MapPin,
   Building2,
@@ -16,6 +18,33 @@ import { useLanguage } from "../components/LanguageProvider";
 
 export default function Home() {
   const { t } = useLanguage();
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const heroSlides = [
+    {
+      image: "/tower6789.jpg",
+      location: "Tower 6789, Ayala Avenue, Makati City",
+    },
+    {
+      image: "/insular_life.jpg",
+      location: "Insular Life Building, Ayala Avenue, Makati City",
+    },
+  ];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length);
+  };
 
   const features = [
     {
@@ -60,72 +89,88 @@ export default function Home() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative bg-gradient-hero text-white overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32 relative z-10">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
-                {t("home.hero.title") as string}{" "}
-                <span className="text-[#8FA8D6]">{t("home.hero.highlight") as string}</span>
-              </h1>
-              <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-xl">
-                {t("home.hero.description") as string}
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Link
-                  href="/virtual-tour"
-                  className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-[#1B3A8C] rounded-full font-semibold hover:bg-gray-100 transition-colors"
-                >
-                  <Play className="w-5 h-5" />
-                  {t("home.hero.virtualTour") as string}
-                </Link>
-                <Link
-                  href="/contact"
-                  className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-[#3B5EA6] text-white rounded-full font-semibold hover:bg-[#5C7ABF] transition-colors"
-                >
-                  {t("home.hero.getQuote") as string}
-                  <ArrowRight className="w-5 h-5" />
-                </Link>
+      <section className="relative text-white overflow-hidden min-h-[700px]">
+        {/* Background Image Carousel */}
+        <div className="absolute inset-0">
+          {heroSlides.map((slide, index) => (
+            <Image
+              key={index}
+              src={slide.image}
+              alt={slide.location}
+              fill
+              className={`absolute inset-0 object-cover transition-opacity duration-1000 ${
+                currentSlide === index ? "opacity-100" : "opacity-0"
+              }`}
+              priority={index === 0}
+            />
+          ))}
+          <div className="absolute inset-0 bg-gradient-to-l from-black/80 via-black/60 to-black/80" />
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="max-w-3xl"
+          >
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
+              {t("home.hero.title") as string}{" "}
+              <span className="text-[#8FA8D6]">{t("home.hero.highlight") as string}</span>
+            </h1>
+            <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-xl">
+              {t("home.hero.description") as string}
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Link
+                href="/virtual-tour"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-[#1B3A8C] rounded-full font-semibold hover:bg-gray-100 transition-colors"
+              >
+                <Play className="w-5 h-5" />
+                {t("home.hero.virtualTour") as string}
+              </Link>
+              <Link
+                href="/contact"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-[#3B5EA6] text-white rounded-full font-semibold hover:bg-[#5C7ABF] transition-colors"
+              >
+                {t("home.hero.getQuote") as string}
+                <ArrowRight className="w-5 h-5" />
+              </Link>
+            </div>
+            <div className="flex items-center gap-8 mt-10 pt-10 border-t border-white/10">
+              <div>
+                <div className="text-3xl font-bold">15+</div>
+                <div className="text-sm text-gray-400">{t("home.hero.yearsExperience") as string}</div>
               </div>
-              <div className="flex items-center gap-8 mt-10 pt-10 border-t border-white/10">
-                <div>
-                  <div className="text-3xl font-bold">15+</div>
-                  <div className="text-sm text-gray-400">{t("home.hero.yearsExperience") as string}</div>
-                </div>
-                <div>
-                  <div className="text-3xl font-bold">500+</div>
-                  <div className="text-sm text-gray-400">{t("home.hero.companiesServed") as string}</div>
-                </div>
-                <div>
-                  <div className="text-3xl font-bold">98%</div>
-                  <div className="text-sm text-gray-400">{t("home.hero.satisfactionRate") as string}</div>
-                </div>
+              <div>
+                <div className="text-3xl font-bold">500+</div>
+                <div className="text-sm text-gray-400">{t("home.hero.companiesServed") as string}</div>
               </div>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="relative hidden lg:block"
-            >
-              <div className="relative rounded-2xl overflow-hidden shadow-2xl">
-                <div className="aspect-[4/3] bg-gradient-to-br from-[#1B3A8C]/30 to-[#3B5EA6]/30 flex items-center justify-center">
-                  <Building2 className="w-32 h-32 text-white/20" />
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                <div className="absolute bottom-6 left-6 right-6">
-                  <div className="flex items-center gap-2 text-sm">
-                    <MapPin className="w-4 h-4" />
-                    Tower 6789, Ayala Avenue, Makati City
-                  </div>
-                </div>
+              <div>
+                <div className="text-3xl font-bold">98%</div>
+                <div className="text-sm text-gray-400">{t("home.hero.satisfactionRate") as string}</div>
               </div>
-            </motion.div>
-          </div>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Location Badge */}
+        <div className="absolute bottom-8 left-8 flex items-center gap-2 bg-black/40 backdrop-blur-sm px-4 py-2 rounded-full">
+          <MapPin className="w-4 h-4" />
+          <span className="text-sm">{heroSlides[currentSlide].location}</span>
+        </div>
+
+        {/* Navigation Dots */}
+        <div className="absolute bottom-8 right-8 flex gap-2">
+          {heroSlides.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentSlide(index)}
+              className={`w-2 h-2 rounded-full transition-all ${
+                currentSlide === index ? "bg-white w-6" : "bg-white/50"
+              }`}
+            />
+          ))}
         </div>
       </section>
 

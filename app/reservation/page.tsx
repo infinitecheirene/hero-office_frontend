@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Calendar,
   Clock,
@@ -17,671 +17,749 @@ import {
   User,
   Briefcase,
   MapPin,
+  ArrowRight,
 } from "lucide-react";
 import { useLanguage } from "../../components/LanguageProvider";
 
+// ─── Types ────────────────────────────────────────────────────────────────────
+interface FormData {
+  spaceType: string;
+  plan: string;
+  date: string;
+  time: string;
+  duration: string;
+  name: string;
+  email: string;
+  phone: string;
+  company: string;
+  message: string;
+  paymentMethod: string;
+  paymentProof: File | null;
+}
+
+// ─── Step indicator ────────────────────────────────────────────────────────────
+const STEPS = ["Space", "Schedule", "Details", "Payment"];
+
+function StepRail({ step }: { step: number }) {
+  return (
+    <div className="flex items-center gap-0 mb-10">
+      {STEPS.map((label, i) => {
+        const idx = i + 1;
+        const done = idx < step;
+        const active = idx === step;
+        return (
+          <div key={label} className="flex items-center">
+            <div className="flex flex-col items-center">
+              <div
+                className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold transition-all duration-300 ${
+                  done
+                    ? "bg-[#1B3A8C] text-white"
+                    : active
+                    ? "bg-[#1B3A8C] text-white ring-4 ring-[#C5D2EC]"
+                    : "bg-[#F0EDE6] text-[#9B9690]"
+                }`}
+              >
+                {done ? <CheckCircle2 className="w-4 h-4" /> : idx}
+              </div>
+              <span
+                className={`mt-1.5 text-[10px] tracking-widest uppercase font-medium ${
+                  active ? "text-[#1B3A8C]" : "text-[#9B9690]"
+                }`}
+              >
+                {label}
+              </span>
+            </div>
+            {i < STEPS.length - 1 && (
+              <div
+                className={`h-px w-12 md:w-20 mx-1 mb-5 transition-all duration-500 ${
+                  done ? "bg-[#1B3A8C]" : "bg-[#DDD9D2]"
+                }`}
+              />
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+// ─── Booking summary sidebar ──────────────────────────────────────────────────
+function BookingSummary({ data, planLabel, price }: { data: FormData; planLabel: string; price: string }) {
+  const rows = [
+    { label: "Space type", value: data.spaceType ? data.spaceType.replace("-", " ") : null },
+    { label: "Plan", value: planLabel || null },
+    { label: "Date", value: data.date || null },
+    { label: "Time", value: data.time ? `${data.time}` : null },
+    { label: "Name", value: data.name || null },
+    { label: "Company", value: data.company || null },
+    { label: "Payment", value: data.paymentMethod ? data.paymentMethod.replace("-", " ") : null },
+  ].filter((r) => r.value);
+
+  return (
+    <aside className="hidden lg:flex flex-col bg-[#0F2460] text-white rounded-2xl p-8 sticky top-8 self-start min-h-[420px] min-w-[60vh]">
+      <p className="text-[10px] tracking-[0.2em] uppercase text-[#8FA8D6] mb-1">Your booking</p>
+      <h3
+        className="text-2xl mb-6"
+        style={{ fontFamily: "'Playfair Display', serif", fontWeight: 500 }}
+      >
+        Summary
+      </h3>
+
+      {rows.length === 0 ? (
+        <p className="text-[#8FA8D6] text-sm leading-relaxed">
+          Your selections will appear here as you complete each step.
+        </p>
+      ) : (
+        <ul className="space-y-4 flex-1">
+          {rows.map((r) => (
+            <li key={r.label} className="flex justify-between items-start gap-4 border-b border-white/10 pb-3">
+              <span className="text-[#8FA8D6] text-xs uppercase tracking-widest">{r.label}</span>
+              <span className="text-white text-sm text-right capitalize font-medium">{r.value}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      {price && (
+        <div className="mt-6 pt-6 border-t border-white/20">
+          <div className="flex justify-between items-baseline">
+            <span className="text-[#8FA8D6] text-xs uppercase tracking-widest">Total</span>
+            <span
+              className="text-xl text-white"
+              style={{ fontFamily: "'Playfair Display', serif" }}
+            >
+              {price}
+            </span>
+          </div>
+        </div>
+      )}
+
+      <div className="mt-8 pt-6 border-t border-white/20 space-y-2">
+        <p className="text-[10px] text-[#8FA8D6] tracking-wider uppercase">Need help?</p>
+        <p className="text-sm text-white flex items-center gap-2">
+          <Phone className="w-3.5 h-3.5 text-[#8FA8D6]" /> +63 2 8801-3417
+        </p>
+        <p className="text-sm text-white flex items-center gap-2">
+          <Mail className="w-3.5 h-3.5 text-[#8FA8D6]" /> sales@heroph.net
+        </p>
+      </div>
+    </aside>
+  );
+}
+
+// ─── Shared field wrapper ─────────────────────────────────────────────────────
+function Field({ label, icon: Icon, children }: { label: string; icon?: React.ElementType; children: React.ReactNode }) {
+  return (
+    <div>
+      <label className="flex items-center gap-1.5 text-sm font-semibold text-gray-700 mb-2">
+        {Icon && <Icon className="w-4 h-4" />}
+        {label}
+      </label>
+      {children}
+    </div>
+  );
+}
+
+const inputCls =
+  "w-full px-4 py-3 bg-[#F7F4EF] border border-[#E0DBD4] rounded-xl text-[#1A1814] text-sm placeholder:text-[#B0AB9F] focus:outline-none focus:ring-2 focus:ring-[#1B3A8C]/30 focus:border-[#1B3A8C] transition";
+
+// ─── Nav buttons ──────────────────────────────────────────────────────────────
+function NavRow({
+  onBack,
+  onNext,
+  nextDisabled,
+  nextLabel = "Continue",
+  isSubmit,
+  isSubmitting,
+}: {
+  onBack?: () => void;
+  onNext?: () => void;
+  nextDisabled?: boolean;
+  nextLabel?: string;
+  isSubmit?: boolean;
+  isSubmitting?: boolean;
+}) {
+  return (
+    <div className="flex justify-between items-center mt-10 pt-6 border-t border-[#EAE6DF]">
+      {onBack ? (
+        <button
+          type="button"
+          onClick={onBack}
+          className="flex items-center gap-2 text-sm text-[#6B6760] hover:text-[#1A1814] transition font-medium"
+        >
+          <ChevronLeft className="w-4 h-4" /> Back
+        </button>
+      ) : (
+        <span />
+      )}
+      <button
+        type={isSubmit ? "submit" : "button"}
+        onClick={!isSubmit ? onNext : undefined}
+        disabled={nextDisabled || isSubmitting}
+        className="flex items-center gap-2 px-8 py-3 bg-[#1B3A8C] text-white text-sm font-semibold rounded-full hover:bg-[#2A4EA0] disabled:bg-[#C5C9D0] disabled:cursor-not-allowed transition-all duration-200"
+      >
+        {isSubmitting ? (
+          <>
+            <span className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+            Submitting…
+          </>
+        ) : (
+          <>
+            {nextLabel}
+            <ArrowRight className="w-4 h-4" />
+          </>
+        )}
+      </button>
+    </div>
+  );
+}
+
+// ─── Main page ────────────────────────────────────────────────────────────────
 export default function ReservationPage() {
   const { t } = useLanguage();
 
   const spaceTypes = [
-    { id: "serviced-office", name: t("reservation.spaceTypes.servicedOffice") as string, icon: Building2 },
-    { id: "meeting-room", name: t("reservation.spaceTypes.meetingRoom") as string, icon: Users },
-    { id: "virtual-office", name: t("reservation.spaceTypes.virtualOffice") as string, icon: Briefcase },
+    { id: "serviced-office", name: "Serviced Office", icon: Building2, desc: "Private rooms, 1–17 seats" },
+    { id: "meeting-room", name: "Meeting Room", icon: Users, desc: "Hourly, up to 10 people" },
+    { id: "virtual-office", name: "Virtual Office", icon: Briefcase, desc: "Address & mail services" },
   ];
 
   const officePlans = [
-    { id: "starter", name: t("reservation.plans.starter") as string, price: "₱25,000/month" },
-    { id: "professional", name: t("reservation.plans.professional") as string, price: "₱45,000/month" },
-    { id: "enterprise", name: t("reservation.plans.enterprise") as string, price: "₱75,000/month" },
+    { id: "starter", name: "Starter", price: "₱25,000/month", note: "Up to 3 seats" },
+    { id: "professional", name: "Professional", price: "₱45,000/month", note: "Up to 8 seats" },
+    { id: "enterprise", name: "Enterprise", price: "₱75,000/month", note: "Up to 17 seats" },
   ];
 
   const meetingRooms = [
-    { id: "small", name: t("reservation.meetingRooms.small") as string, price: "₱1,500/hour" },
-    { id: "large", name: t("reservation.meetingRooms.large") as string, price: "₱3,000/hour" },
+    { id: "small", name: "Small Room", price: "₱1,500/hour", note: "Up to 5 people" },
+    { id: "large", name: "Large Room", price: "₱3,000/hour", note: "Up to 10 people" },
   ];
 
   const virtualPlans = [
-    { id: "basic", name: t("reservation.virtualPlans.basic") as string, price: "₱8,000/month" },
-    { id: "premium", name: t("reservation.virtualPlans.premium") as string, price: "₱15,000/month" },
+    { id: "basic", name: "Basic", price: "₱8,000/month", note: "Address registration" },
+    { id: "premium", name: "Premium", price: "₱15,000/month", note: "Address + mail forwarding" },
   ];
 
   const paymentMethods = [
-    { id: "bank-transfer", name: t("reservation.paymentMethods.bankTransfer") as string, description: t("reservation.paymentMethods.bankTransferDesc") as string },
-    { id: "check", name: t("reservation.paymentMethods.check") as string, description: t("reservation.paymentMethods.checkDesc") as string },
-    { id: "cash", name: t("reservation.paymentMethods.cash") as string, description: t("reservation.paymentMethods.cashDesc") as string },
+    { id: "bank-transfer", name: "Bank Transfer", description: "Transfer directly to our bank account" },
+    { id: "check", name: "Check", description: "Pay via check deposit" },
+    { id: "cash", name: "Cash", description: "Pay in person at our office" },
   ];
+
   const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState({
-    spaceType: "",
-    plan: "",
-    date: "",
-    time: "",
-    duration: "1",
-    name: "",
-    email: "",
-    phone: "",
-    company: "",
-    message: "",
-    paymentMethod: "",
-    paymentProof: null as File | null,
+  const [formData, setFormData] = useState<FormData>({
+    spaceType: "", plan: "", date: "", time: "", duration: "1",
+    name: "", email: "", phone: "", company: "", message: "",
+    paymentMethod: "", paymentProof: null,
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
-  ) => {
+  const handleInput = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((p) => ({ ...p, [name]: value }));
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setFormData((prev) => ({ ...prev, paymentProof: e.target.files![0] }));
-    }
+  const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files?.[0]) setFormData((p) => ({ ...p, paymentProof: e.target.files![0] }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    await new Promise((r) => setTimeout(r, 2000));
     setIsSubmitting(false);
     setIsSubmitted(true);
   };
 
   const getPlanOptions = () => {
-    switch (formData.spaceType) {
-      case "serviced-office":
-        return officePlans;
-      case "meeting-room":
-        return meetingRooms;
-      case "virtual-office":
-        return virtualPlans;
-      default:
-        return [];
-    }
+    if (formData.spaceType === "serviced-office") return officePlans;
+    if (formData.spaceType === "meeting-room") return meetingRooms;
+    if (formData.spaceType === "virtual-office") return virtualPlans;
+    return [];
   };
 
+  const currentPlan = getPlanOptions().find((p) => p.id === formData.plan);
+  const planLabel = currentPlan?.name ?? "";
+  const price = currentPlan?.price ?? "";
+
+  // ── Success screen ──────────────────────────────────────────────────────────
   if (isSubmitted) {
     return (
-      <div className="min-h-screen bg-gray-50 pt-20 pb-20">
-        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="bg-white rounded-2xl shadow-xl p-8 md:p-12 text-center"
+      <div
+        className="min-h-screen flex items-center justify-center px-4"
+        style={{ background: "#F7F4EF", fontFamily: "'DM Sans', system-ui, sans-serif" }}
+      >
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="bg-white rounded-3xl p-10 md:p-16 max-w-lg w-full text-center shadow-xl"
+        >
+          <div className="w-16 h-16 bg-[#E8F5EC] rounded-full flex items-center justify-center mx-auto mb-6">
+            <CheckCircle2 className="w-8 h-8 text-[#2E7D4F]" />
+          </div>
+          <p className="text-[10px] tracking-[0.25em] uppercase text-[#9B9690] mb-2">Booking received</p>
+          <h1
+            className="text-3xl text-[#1A1814] mb-4"
+            style={{ fontFamily: "'Playfair Display', serif", fontWeight: 500 }}
           >
-            <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <CheckCircle2 className="w-10 h-10 text-green-600" />
-            </div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-4">
-              {t("reservation.success.title") as string}
-            </h1>
-            <p className="text-gray-600 mb-8">
-              {t("reservation.success.subtitle") as string}
-            </p>
-            <div className="bg-[#C5D2EC]/30 rounded-xl p-6 mb-8 text-left">
-              <h3 className="font-semibold text-gray-900 mb-4">{t("reservation.success.nextStepsTitle") as string}</h3>
-              <ul className="space-y-3 text-gray-600">
-                <li className="flex items-start gap-3">
-                  <span className="w-6 h-6 bg-[#1B3A8C] rounded-full flex items-center justify-center text-white text-xs flex-shrink-0">
-                    1
-                  </span>
-                  <span>{t("reservation.success.step1") as string}</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="w-6 h-6 bg-[#1B3A8C] rounded-full flex items-center justify-center text-white text-xs flex-shrink-0">
-                    2
-                  </span>
-                  <span>{t("reservation.success.step2") as string}</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="w-6 h-6 bg-[#1B3A8C] rounded-full flex items-center justify-center text-white text-xs flex-shrink-0">
-                    3
-                  </span>
-                  <span>{t("reservation.success.step3") as string}</span>
-                </li>
-              </ul>
-            </div>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a
-                href="/"
-                className="px-8 py-3 bg-[#1B3A8C] text-white rounded-full font-semibold hover:bg-[#3B5EA6] transition-colors"
-              >
-                {t("reservation.success.backHome") as string}
-              </a>
-              <a
-                href="/contact"
-                className="px-8 py-3 bg-gray-100 text-gray-700 rounded-full font-semibold hover:bg-gray-200 transition-colors"
-              >
-                {t("reservation.success.contactSupport") as string}
-              </a>
-            </div>
-          </motion.div>
-        </div>
+            Reservation Confirmed
+          </h1>
+          <p className="text-[#6B6760] mb-10 leading-relaxed">
+            Thank you for your reservation. We will review your booking and send a confirmation email within 24 hours.
+          </p>
+
+          <div className="bg-[#F7F4EF] rounded-2xl p-6 text-left mb-8 space-y-4">
+            {[
+              "We will verify your payment and booking details",
+              "You will receive a confirmation email with your reservation details",
+              "Our team will contact you for any additional information if needed",
+            ].map((s, i) => (
+              <div key={i} className="flex items-start gap-3">
+                <span className="w-5 h-5 rounded-full bg-[#1B3A8C] text-white text-[10px] flex items-center justify-center flex-shrink-0 mt-0.5">
+                  {i + 1}
+                </span>
+                <p className="text-sm text-[#4A4740]">{s}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <a
+              href="/"
+              className="px-8 py-3 bg-[#1B3A8C] text-white rounded-full text-sm font-semibold hover:bg-[#2A4EA0] transition"
+            >
+              Back to Home
+            </a>
+            <a
+              href="/contact"
+              className="px-8 py-3 bg-[#F0EDE6] text-[#4A4740] rounded-full text-sm font-semibold hover:bg-[#E5E1D9] transition"
+            >
+              Contact Support
+            </a>
+          </div>
+        </motion.div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div style={{ background: "#F7F4EF", fontFamily: "'DM Sans', system-ui, sans-serif" }} className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative bg-gradient-hero text-white py-16 lg:py-24">
+      <section className="relative bg-gradient-hero text-white py-20 lg:py-32">
         <div className="absolute inset-0 bg-[url('/pattern.svg')] opacity-10" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="text-center"
+            className="text-center max-w-3xl mx-auto"
           >
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
               {t("reservation.hero.title") as string}
             </h1>
-            <p className="text-lg text-gray-300 max-w-2xl mx-auto">
+            <p className="text-xl text-gray-300">
               {t("reservation.hero.subtitle") as string}
             </p>
           </motion.div>
         </div>
       </section>
 
-      {/* Reservation Form */}
-      <section className="py-12">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Progress Steps */}
-          <div className="mb-8">
-            <div className="flex items-center justify-between">
-              {[1, 2, 3, 4].map((s) => (
-                <div key={s} className="flex items-center">
-                  <div
-                    className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold ${
-                      s <= step
-                        ? "bg-[#1B3A8C] text-white"
-                        : "bg-gray-200 text-gray-500"
-                    }`}
+      {/* ── Form area ─────────────────────────────────────────────────────────── */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+        <div className="grid lg:grid-cols-[1fr_300px] gap-8 items-start">
+
+          {/* Left: form card */}
+          <div className="bg-white rounded-3xl p-8 md:p-12 shadow-xl shadow-[#0F2460]/5 border border-[#EAE6DF]">
+            <StepRail step={step} />
+
+            <form onSubmit={handleSubmit}>
+              <AnimatePresence mode="wait">
+
+                {/* ── Step 1: Space ──────────────────────────────────────────── */}
+                {step === 1 && (
+                  <motion.div
+                    key="step1"
+                    initial={{ opacity: 0, x: 16 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -16 }}
+                    transition={{ duration: 0.25 }}
                   >
-                    {s}
-                  </div>
-                  {s < 4 && (
-                    <div
-                      className={`w-16 md:w-24 h-1 mx-2 ${
-                        s < step ? "bg-[#1B3A8C]" : "bg-gray-200"
-                      }`}
-                    />
-                  )}
-                </div>
-              ))}
-            </div>
-            <div className="flex justify-between mt-2 text-sm text-gray-600">
-              <span className="w-10 text-center">{t("reservation.steps.space") as string}</span>
-              <span className="w-10 text-center">{t("reservation.steps.schedule") as string}</span>
-              <span className="w-10 text-center">{t("reservation.steps.details") as string}</span>
-              <span className="w-10 text-center">{t("reservation.steps.payment") as string}</span>
-            </div>
-          </div>
+                    <h2 className="text-2xl font-bold text-gray-900 mb-6">
+                      Select Space Type
+                    </h2>
 
-          <form onSubmit={handleSubmit}>
-            {/* Step 1: Space Selection */}
-            {step === 1 && (
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="bg-white rounded-2xl shadow-sm p-6 md:p-8"
-              >
-                <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                  {t("reservation.step1.title") as string}
-                </h2>
-                <div className="grid md:grid-cols-3 gap-4 mb-6">
-                  {spaceTypes.map((type) => (
-                    <button
-                      key={type.id}
-                      type="button"
-                      onClick={() =>
-                        setFormData((prev) => ({ ...prev, spaceType: type.id, plan: "" }))
-                      }
-                      className={`p-6 rounded-xl border-2 text-center transition-colors ${
-                        formData.spaceType === type.id
-                          ? "border-[#1B3A8C] bg-[#C5D2EC]/30"
-                          : "border-gray-200 hover:border-[#8FA8D6]"
-                      }`}
-                    >
-                      <type.icon
-                        className={`w-10 h-10 mx-auto mb-3 ${
-                          formData.spaceType === type.id ? "text-[#1B3A8C]" : "text-gray-400"
-                        }`}
-                      />
-                      <span
-                        className={`font-semibold ${
-                          formData.spaceType === type.id ? "text-[#1B3A8C]" : "text-gray-700"
-                        }`}
-                      >
-                        {type.name}
-                      </span>
-                    </button>
-                  ))}
-                </div>
-
-                {formData.spaceType && (
-                  <div className="mt-6">
-                    <h3 className="font-semibold text-gray-900 mb-4">{t("reservation.step1.selectPlan") as string}</h3>
-                    <div className="space-y-3">
-                      {getPlanOptions().map((plan) => (
-                        <button
-                          key={plan.id}
-                          type="button"
-                          onClick={() =>
-                            setFormData((prev) => ({ ...prev, plan: plan.id }))
-                          }
-                          className={`w-full p-4 rounded-xl border-2 flex items-center justify-between transition-colors ${
-                            formData.plan === plan.id
-                              ? "border-[#1B3A8C] bg-[#C5D2EC]/30"
-                              : "border-gray-200 hover:border-[#8FA8D6]"
-                          }`}
-                        >
-                          <span
-                            className={`font-semibold ${
-                              formData.plan === plan.id ? "text-[#1B3A8C]" : "text-gray-700"
+                    <div className="grid sm:grid-cols-3 gap-5 mb-8">
+                      {spaceTypes.map((type) => {
+                        const Icon = type.icon;
+                        const active = formData.spaceType === type.id;
+                        return (
+                          <button
+                            key={type.id}
+                            type="button"
+                            onClick={() => setFormData((p) => ({ ...p, spaceType: type.id, plan: "" }))}
+                            className={`relative p-6 rounded-2xl border-2 text-left transition-all duration-300 group overflow-hidden ${
+                              active
+                                ? "border-[#1B3A8C] bg-gradient-to-br from-[#EEF2FB] to-[#C5D2EC]/30 shadow-lg shadow-[#1B3A8C]/10"
+                                : "border-[#E0DBD4] bg-white hover:border-[#1B3A8C] hover:shadow-md"
                             }`}
                           >
-                            {plan.name}
-                          </span>
-                          <span className="text-gray-600">{plan.price}</span>
-                        </button>
-                      ))}
+                            {active && (
+                              <div className="absolute top-0 right-0 w-20 h-20 bg-[#1B3A8C]/5 rounded-full -translate-y-1/2 translate-x-1/2" />
+                            )}
+                            <div
+                              className={`relative w-12 h-12 rounded-xl flex items-center justify-center mb-4 transition-all duration-300 ${
+                                active ? "bg-[#1B3A8C] shadow-lg shadow-[#1B3A8C]/20" : "bg-[#E0DBD4] group-hover:bg-[#1B3A8C]"
+                              }`}
+                            >
+                              <Icon className={`w-6 h-6 transition-colors ${active ? "text-white" : "text-[#9B9690] group-hover:text-white"}`} />
+                            </div>
+                            <p className={`relative font-semibold text-base mb-1 transition-colors ${active ? "text-[#1B3A8C]" : "text-[#1A1814] group-hover:text-[#1B3A8C]"}`}>
+                              {type.name}
+                            </p>
+                            <p className="relative text-xs text-[#9B9690]">{type.desc}</p>
+                          </button>
+                        );
+                      })}
                     </div>
-                  </div>
+
+                    {formData.spaceType && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <p className="text-sm font-semibold text-gray-700 mb-3">
+                          Select Plan
+                        </p>
+                        <div className="space-y-3">
+                          {getPlanOptions().map((plan) => {
+                            const active = formData.plan === plan.id;
+                            return (
+                              <button
+                                key={plan.id}
+                                type="button"
+                                onClick={() => setFormData((p) => ({ ...p, plan: plan.id }))}
+                                className={`relative w-full px-6 py-5 rounded-2xl border-2 flex items-center justify-between transition-all duration-300 group overflow-hidden ${
+                                  active
+                                    ? "border-[#1B3A8C] bg-gradient-to-r from-[#EEF2FB] to-[#C5D2EC]/20 shadow-md shadow-[#1B3A8C]/10"
+                                    : "border-[#E0DBD4] bg-white hover:border-[#1B3A8C] hover:shadow-sm"
+                                }`}
+                              >
+                                {active && (
+                                  <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#1B3A8C]" />
+                                )}
+                                <div className="text-left relative">
+                                  <p className={`font-semibold text-base transition-colors ${active ? "text-[#1B3A8C]" : "text-[#1A1814] group-hover:text-[#1B3A8C]"}`}>
+                                    {plan.name}
+                                  </p>
+                                  {"note" in plan && (
+                                    <p className="text-xs text-[#9B9690] mt-1">{(plan as any).note}</p>
+                                  )}
+                                </div>
+                                <span className={`relative text-base font-semibold transition-colors ${active ? "text-[#1B3A8C]" : "text-[#6B6760] group-hover:text-[#1B3A8C]"}`}>
+                                  {plan.price}
+                                </span>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </motion.div>
+                    )}
+
+                    <NavRow
+                      onNext={() => setStep(2)}
+                      nextDisabled={!formData.spaceType || !formData.plan}
+                    />
+                  </motion.div>
                 )}
 
-                <div className="flex justify-end mt-8">
-                  <button
-                    type="button"
-                    onClick={() => setStep(2)}
-                    disabled={!formData.spaceType || !formData.plan}
-                    className="px-6 py-3 bg-[#1B3A8C] text-white rounded-full font-semibold hover:bg-[#3B5EA6] transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center gap-2"
+                {/* ── Step 2: Schedule ───────────────────────────────────────── */}
+                {step === 2 && (
+                  <motion.div
+                    key="step2"
+                    initial={{ opacity: 0, x: 16 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -16 }}
+                    transition={{ duration: 0.25 }}
                   >
-                    Next
-                    <ChevronRight className="w-5 h-5" />
-                  </button>
-                </div>
-              </motion.div>
-            )}
+                    <h2 className="text-2xl font-bold text-gray-900 mb-6">
+                      Schedule Visit
+                    </h2>
 
-            {/* Step 2: Schedule */}
-            {step === 2 && (
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="bg-white rounded-2xl shadow-sm p-6 md:p-8"
-              >
-                <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                  {t("reservation.step2.title") as string}
-                </h2>
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      <Calendar className="w-4 h-4 inline mr-2" />
-                      {t("reservation.step2.preferredDate") as string}
-                    </label>
-                    <input
-                      type="date"
-                      name="date"
-                      value={formData.date}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#1B3A8C] focus:border-transparent"
-                      required
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <Field label="Preferred Date" icon={Calendar}>
+                        <input
+                          type="date"
+                          name="date"
+                          value={formData.date}
+                          onChange={handleInput}
+                          className={inputCls}
+                          required
+                        />
+                      </Field>
+                      <Field label="Preferred Time" icon={Clock}>
+                        <select
+                          name="time"
+                          value={formData.time}
+                          onChange={handleInput}
+                          className={inputCls}
+                          required
+                        >
+                          <option value="">Select Time</option>
+                          <option value="09:00">9:00 AM</option>
+                          <option value="10:00">10:00 AM</option>
+                          <option value="11:00">11:00 AM</option>
+                          <option value="13:00">1:00 PM</option>
+                          <option value="14:00">2:00 PM</option>
+                          <option value="15:00">3:00 PM</option>
+                          <option value="16:00">4:00 PM</option>
+                        </select>
+                      </Field>
+                    </div>
+
+                    {formData.spaceType === "meeting-room" && (
+                      <div className="mt-6">
+                        <Field label="Duration" icon={Clock}>
+                          <select
+                            name="duration"
+                            value={formData.duration}
+                            onChange={handleInput}
+                            className={inputCls}
+                          >
+                            <option value="1">{t("reservation.step2.1hour") as string}</option>
+                            <option value="2">{t("reservation.step2.2hours") as string}</option>
+                            <option value="3">{t("reservation.step2.3hours") as string}</option>
+                            <option value="4">{t("reservation.step2.halfDay") as string}</option>
+                            <option value="8">{t("reservation.step2.fullDay") as string}</option>
+                          </select>
+                        </Field>
+                      </div>
+                    )}
+
+                    <NavRow
+                      onBack={() => setStep(1)}
+                      onNext={() => setStep(3)}
+                      nextDisabled={!formData.date || !formData.time}
                     />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      <Clock className="w-4 h-4 inline mr-2" />
-                      {t("reservation.step2.preferredTime") as string}
-                    </label>
-                    <select
-                      name="time"
-                      value={formData.time}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#1B3A8C] focus:border-transparent"
-                      required
-                    >
-                      <option value="">{t("reservation.step2.selectTime") as string}</option>
-                      <option value="09:00">9:00 AM</option>
-                      <option value="10:00">10:00 AM</option>
-                      <option value="11:00">11:00 AM</option>
-                      <option value="13:00">1:00 PM</option>
-                      <option value="14:00">2:00 PM</option>
-                      <option value="15:00">3:00 PM</option>
-                      <option value="16:00">4:00 PM</option>
-                    </select>
-                  </div>
-                </div>
-
-                {formData.spaceType === "meeting-room" && (
-                  <div className="mt-6">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      {t("reservation.step2.duration") as string}
-                    </label>
-                    <select
-                      name="duration"
-                      value={formData.duration}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#1B3A8C] focus:border-transparent"
-                    >
-                      <option value="1">{t("reservation.step2.1hour") as string}</option>
-                      <option value="2">{t("reservation.step2.2hours") as string}</option>
-                      <option value="3">{t("reservation.step2.3hours") as string}</option>
-                      <option value="4">{t("reservation.step2.halfDay") as string}</option>
-                      <option value="8">{t("reservation.step2.fullDay") as string}</option>
-                    </select>
-                  </div>
+                  </motion.div>
                 )}
 
-                <div className="flex justify-between mt-8">
-                  <button
-                    type="button"
-                    onClick={() => setStep(1)}
-                    className="px-6 py-3 bg-gray-100 text-gray-700 rounded-full font-semibold hover:bg-gray-200 transition-colors flex items-center gap-2"
+                {/* ── Step 3: Details ────────────────────────────────────────── */}
+                {step === 3 && (
+                  <motion.div
+                    key="step3"
+                    initial={{ opacity: 0, x: 16 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -16 }}
+                    transition={{ duration: 0.25 }}
                   >
-                    <ChevronLeft className="w-5 h-5" />
-                    {t("reservation.back") as string}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setStep(3)}
-                    disabled={!formData.date || !formData.time}
-                    className="px-6 py-3 bg-[#1B3A8C] text-white rounded-full font-semibold hover:bg-[#3B5EA6] transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center gap-2"
+                    <h2 className="text-2xl font-bold text-gray-900 mb-6">
+                      Your Details
+                    </h2>
+
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <Field label="Full Name" icon={User}>
+                        <input
+                          type="text"
+                          name="name"
+                          value={formData.name}
+                          onChange={handleInput}
+                          className={inputCls}
+                          placeholder="John Doe"
+                          required
+                        />
+                      </Field>
+                      <Field label="Company Name" icon={Briefcase}>
+                        <input
+                          type="text"
+                          name="company"
+                          value={formData.company}
+                          onChange={handleInput}
+                          className={inputCls}
+                          placeholder="Your Company"
+                        />
+                      </Field>
+                      <Field label="Email Address" icon={Mail}>
+                        <input
+                          type="email"
+                          name="email"
+                          value={formData.email}
+                          onChange={handleInput}
+                          className={inputCls}
+                          placeholder="john@company.com"
+                          required
+                        />
+                      </Field>
+                      <Field label="Phone Number" icon={Phone}>
+                        <input
+                          type="tel"
+                          name="phone"
+                          value={formData.phone}
+                          onChange={handleInput}
+                          className={inputCls}
+                          placeholder="+63 XXX XXX XXXX"
+                          required
+                        />
+                      </Field>
+                    </div>
+
+                    <div className="mt-6">
+                      <Field label="Additional Message">
+                        <textarea
+                          name="message"
+                          value={formData.message}
+                          onChange={handleInput}
+                          rows={4}
+                          className={inputCls + " resize-none"}
+                          placeholder="Any special requirements or questions…"
+                        />
+                      </Field>
+                    </div>
+
+                    <NavRow
+                      onBack={() => setStep(2)}
+                      onNext={() => setStep(4)}
+                      nextDisabled={!formData.name || !formData.email || !formData.phone}
+                    />
+                  </motion.div>
+                )}
+
+                {/* ── Step 4: Payment ────────────────────────────────────────── */}
+                {step === 4 && (
+                  <motion.div
+                    key="step4"
+                    initial={{ opacity: 0, x: 16 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -16 }}
+                    transition={{ duration: 0.25 }}
                   >
-                    Next
-                    <ChevronRight className="w-5 h-5" />
-                  </button>
-                </div>
-              </motion.div>
-            )}
+                    <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                      Payment
+                    </h2>
+                    <p className="text-gray-600 mb-6">
+                      Complete your reservation by making a payment
+                    </p>
 
-            {/* Step 3: Personal Details */}
-            {step === 3 && (
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="bg-white rounded-2xl shadow-sm p-6 md:p-8"
-              >
-                <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                  {t("reservation.step3.title") as string}
-                </h2>
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      <User className="w-4 h-4 inline mr-2" />
-                      {t("reservation.step3.fullName") as string} *
-                    </label>
-                    <input
-                      type="text"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#1B3A8C] focus:border-transparent"
-                      placeholder="John Doe"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      <Briefcase className="w-4 h-4 inline mr-2" />
-                      {t("reservation.step3.companyName") as string}
-                    </label>
-                    <input
-                      type="text"
-                      name="company"
-                      value={formData.company}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#1B3A8C] focus:border-transparent"
-                      placeholder="Your Company"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      <Mail className="w-4 h-4 inline mr-2" />
-                      {t("reservation.step3.emailAddress") as string} *
-                    </label>
-                    <input
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#1B3A8C] focus:border-transparent"
-                      placeholder="john@company.com"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      <Phone className="w-4 h-4 inline mr-2" />
-                      {t("reservation.step3.phoneNumber") as string} *
-                    </label>
-                    <input
-                      type="tel"
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#1B3A8C] focus:border-transparent"
-                      placeholder="+63 XXX XXX XXXX"
-                      required
-                    />
-                  </div>
-                </div>
-                <div className="mt-6">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {t("reservation.step3.additionalMessage") as string}
-                  </label>
-                  <textarea
-                    name="message"
-                    value={formData.message}
-                    onChange={handleInputChange}
-                    rows={4}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#1B3A8C] focus:border-transparent"
-                    placeholder="Any special requirements or questions..."
-                  />
-                </div>
-
-                <div className="flex justify-between mt-8">
-                  <button
-                    type="button"
-                    onClick={() => setStep(2)}
-                    className="px-6 py-3 bg-gray-100 text-gray-700 rounded-full font-semibold hover:bg-gray-200 transition-colors flex items-center gap-2"
-                  >
-                    <ChevronLeft className="w-5 h-5" />
-                    {t("reservation.back") as string}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setStep(4)}
-                    disabled={!formData.name || !formData.email || !formData.phone}
-                    className="px-6 py-3 bg-[#1B3A8C] text-white rounded-full font-semibold hover:bg-[#3B5EA6] transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center gap-2"
-                  >
-                    Next
-                    <ChevronRight className="w-5 h-5" />
-                  </button>
-                </div>
-              </motion.div>
-            )}
-
-            {/* Step 4: Payment */}
-            {step === 4 && (
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="bg-white rounded-2xl shadow-sm p-6 md:p-8"
-              >
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                  {t("reservation.step4.title") as string}
-                </h2>
-                <p className="text-gray-600 mb-6">
-                  {t("reservation.step4.subtitle") as string}
-                </p>
-
-                {/* Bank Details */}
-                <div className="bg-blue-50 rounded-xl p-6 mb-6">
-                  <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                    <CreditCard className="w-5 h-5" />
-                    {t("reservation.step4.bankDetails") as string}
-                  </h3>
-                  <div className="space-y-3 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">{t("reservation.step4.bankName") as string}:</span>
-                      <span className="font-medium">{t("reservation.step4.bankNameValue") as string}</span>
+                    {/* Bank details */}
+                    <div className="bg-gradient-to-br from-[#EEF2FB] to-[#C5D2EC]/30 border border-[#C5D2EC] rounded-2xl p-7 mb-8 shadow-sm">
+                      <p className="text-[11px] tracking-[0.25em] uppercase text-[#4A6AAC] mb-5 flex items-center gap-2 font-semibold">
+                        <CreditCard className="w-4 h-4" />
+                        Bank Details
+                      </p>
+                      <dl className="space-y-3 text-sm">
+                        {[
+                          ["Bank name", "BDO"],
+                          ["Account name", "Hero Office Philippines Inc."],
+                          ["Account number", "1234-5678-9012-3456"],
+                          ["Branch", "Ayala Avenue, Makati"],
+                        ].map(([k, v]) => (
+                          <div key={k} className="flex justify-between items-center py-2 border-b border-[#C5D2EC]/30 last:border-0">
+                            <dt className="text-[#4A6AAC] font-medium">{k}</dt>
+                            <dd className="font-semibold text-[#1B3A8C]">{v}</dd>
+                          </div>
+                        ))}
+                      </dl>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">{t("reservation.step4.accountName") as string}:</span>
-                      <span className="font-medium">{t("reservation.step4.accountNameValue") as string}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Account Number:</span>
-                      <span className="font-medium">1234-5678-9012-3456</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Branch:</span>
-                      <span className="font-medium">Ayala Avenue, Makati</span>
-                    </div>
-                  </div>
-                </div>
 
-                {/* Payment Method */}
-                <div className="mb-6">
-                  <label className="block text-sm font-medium text-gray-700 mb-3">
-                    {t("reservation.step4.selectPaymentMethod") as string}
-                  </label>
-                  <div className="space-y-3">
-                    {paymentMethods.map((method) => (
-                      <button
-                        key={method.id}
-                        type="button"
-                        onClick={() =>
-                          setFormData((prev) => ({ ...prev, paymentMethod: method.id }))
-                        }
-                        className={`w-full p-4 rounded-xl border-2 text-left transition-colors ${
-                          formData.paymentMethod === method.id
-                            ? "border-[#1B3A8C] bg-[#C5D2EC]/30"
-                            : "border-gray-200 hover:border-[#8FA8D6]"
+                    {/* Payment method */}
+                    <div className="mb-8">
+                      <p className="text-[11px] tracking-[0.25em] uppercase text-[#9B9690] mb-4 font-semibold">
+                        Select Payment Method
+                      </p>
+                      <div className="space-y-3">
+                        {paymentMethods.map((m) => {
+                          const active = formData.paymentMethod === m.id;
+                          return (
+                            <button
+                              key={m.id}
+                              type="button"
+                              onClick={() => setFormData((p) => ({ ...p, paymentMethod: m.id }))}
+                              className={`relative w-full px-6 py-5 rounded-2xl border-2 text-left transition-all duration-300 group overflow-hidden ${
+                                active
+                                  ? "border-[#1B3A8C] bg-gradient-to-r from-[#EEF2FB] to-[#C5D2EC]/20 shadow-md shadow-[#1B3A8C]/10"
+                                  : "border-[#E0DBD4] bg-white hover:border-[#1B3A8C] hover:shadow-sm"
+                              }`}
+                            >
+                              {active && (
+                                <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#1B3A8C]" />
+                              )}
+                              <div className="relative">
+                                <p className={`font-semibold text-base transition-colors ${active ? "text-[#1B3A8C]" : "text-[#1A1814] group-hover:text-[#1B3A8C]"}`}>
+                                  {m.name}
+                                </p>
+                                <p className="text-xs text-[#9B9690] mt-1">{m.description}</p>
+                              </div>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* File upload */}
+                    <div className="mb-8">
+                      <p className="text-[11px] tracking-[0.25em] uppercase text-[#9B9690] mb-4 font-semibold flex items-center gap-2">
+                        <Upload className="w-4 h-4" />
+                        Upload Payment Proof *
+                      </p>
+                      <label
+                        htmlFor="payment-proof"
+                        className={`flex flex-col items-center justify-center w-full h-40 border-2 border-dashed rounded-2xl cursor-pointer transition-all duration-300 group ${
+                          formData.paymentProof
+                            ? "border-[#2E7D4F] bg-gradient-to-br from-[#F0FAF3] to-[#E8F5EC] shadow-md shadow-[#2E7D4F]/10"
+                            : "border-[#DDD9D2] bg-[#F7F4EF] hover:border-[#1B3A8C] hover:bg-white hover:shadow-md"
                         }`}
                       >
-                        <div
-                          className={`font-semibold ${
-                            formData.paymentMethod === method.id
-                              ? "text-[#1B3A8C]"
-                              : "text-gray-700"
-                          }`}
-                        >
-                          {method.name}
-                        </div>
-                        <div className="text-sm text-gray-500 mt-1">
-                          {method.description}
-                        </div>
-                      </button>
-                    ))}
-                  </div>
-                </div>
+                        {formData.paymentProof ? (
+                          <div className="flex items-center gap-3 text-[#2E7D4F]">
+                            <CheckCircle2 className="w-6 h-6" />
+                            <span className="text-sm font-medium">{formData.paymentProof.name}</span>
+                          </div>
+                        ) : (
+                          <>
+                            <Upload className="w-10 h-10 text-[#B0AB9F] mb-3 group-hover:text-[#1B3A8C] transition-colors" />
+                            <p className="text-sm text-[#6B6760] group-hover:text-[#1A1814] transition-colors">
+                              Click to upload or drag and drop
+                            </p>
+                            <p className="text-xs text-[#B0AB9F] mt-2 group-hover:text-[#9B9690] transition-colors">
+                              PNG, JPG, PDF up to 10MB
+                            </p>
+                          </>
+                        )}
+                        <input
+                          id="payment-proof"
+                          type="file"
+                          accept="image/*,.pdf"
+                          onChange={handleFile}
+                          className="hidden"
+                          required
+                        />
+                      </label>
+                    </div>
 
-                {/* File Upload */}
-                <div className="mb-6">
-                  <label className="block text-sm font-medium text-gray-700 mb-3">
-                    <Upload className="w-4 h-4 inline mr-2" />
-                    {t("reservation.step4.uploadPaymentProof") as string} *
-                  </label>
-                  <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-blue-400 transition-colors">
-                    <input
-                      type="file"
-                      accept="image/*,.pdf"
-                      onChange={handleFileChange}
-                      className="hidden"
-                      id="payment-proof"
-                      required
+                    {/* Note */}
+                    <div className="bg-gradient-to-r from-[#FEF9EC] to-[#FDF6E3] border border-[#F5E0A0] rounded-2xl px-6 py-5 text-sm text-[#7A6020] shadow-sm">
+                      <strong className="font-semibold">Note:</strong>{" "}
+                      Your reservation will be confirmed within 24 hours after payment verification.
+                    </div>
+
+                    <NavRow
+                      onBack={() => setStep(3)}
+                      nextLabel={t("reservation.step4.completeReservation") as string}
+                      nextDisabled={!formData.paymentMethod || !formData.paymentProof}
+                      isSubmit
+                      isSubmitting={isSubmitting}
                     />
-                    <label
-                      htmlFor="payment-proof"
-                      className="cursor-pointer block"
-                    >
-                      {formData.paymentProof ? (
-                        <div className="flex items-center justify-center gap-2 text-green-600">
-                          <CheckCircle2 className="w-5 h-5" />
-                          <span>{formData.paymentProof.name}</span>
-                        </div>
-                      ) : (
-                        <>
-                          <Upload className="w-10 h-10 text-gray-400 mx-auto mb-3" />
-                          <p className="text-gray-600">
-                            {t("reservation.step4.uploadInstructions") as string}
-                          </p>
-                          <p className="text-sm text-gray-400 mt-1">
-                            {t("reservation.step4.supports") as string}
-                          </p>
-                        </>
-                      )}
-                    </label>
-                  </div>
-                </div>
+                  </motion.div>
+                )}
 
-                {/* Terms */}
-                <div className="mb-6 p-4 bg-yellow-50 rounded-xl">
-                  <p className="text-sm text-yellow-800">
-                    <strong>{t("reservation.step4.noteLabel") as string}:</strong> {t("reservation.step4.noteText") as string}
-                  </p>
-                </div>
-
-                <div className="flex justify-between mt-8">
-                  <button
-                    type="button"
-                    onClick={() => setStep(3)}
-                    className="px-6 py-3 bg-gray-100 text-gray-700 rounded-full font-semibold hover:bg-gray-200 transition-colors flex items-center gap-2"
-                  >
-                    <ChevronLeft className="w-5 h-5" />
-                    {t("reservation.back") as string}
-                  </button>
-                  <button
-                    type="submit"
-                    disabled={
-                      isSubmitting || !formData.paymentMethod || !formData.paymentProof
-                    }
-                    className="px-8 py-3 bg-blue-600 text-white rounded-full font-semibold hover:bg-blue-700 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center gap-2"
-                  >
-                    {isSubmitting ? (
-                      <>
-                        <span className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent" />
-                        {t("reservation.step4.submitting") as string}
-                      </>
-                    ) : (
-                      <>
-                        {t("reservation.step4.completeReservation") as string}
-                        <CheckCircle2 className="w-5 h-5" />
-                      </>
-                    )}
-                  </button>
-                </div>
-              </motion.div>
-            )}
-          </form>
-        </div>
-      </section>
-
-      {/* Support Info */}
-      <section className="py-12 bg-gray-100">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-3 gap-6 text-center">
-            <div className="p-4">
-              <Phone className="w-8 h-8 text-blue-600 mx-auto mb-2" />
-              <p className="font-semibold text-gray-900">{t("reservation.support.needHelp") as string}</p>
-              <p className="text-gray-600 text-sm">+63 2 8801-3417</p>
-            </div>
-            <div className="p-4">
-              <Mail className="w-8 h-8 text-blue-600 mx-auto mb-2" />
-              <p className="font-semibold text-gray-900">{t("reservation.support.emailUs") as string}</p>
-              <p className="text-gray-600 text-sm">sales@heroph.net</p>
-            </div>
-            <div className="p-4">
-              <MapPin className="w-8 h-8 text-blue-600 mx-auto mb-2" />
-              <p className="font-semibold text-gray-900">{t("reservation.support.visitUs") as string}</p>
-              <p className="text-gray-600 text-sm">Tower 6789, Ayala Avenue</p>
-            </div>
+              </AnimatePresence>
+            </form>
           </div>
+
+          {/* Right: summary panel */}
+          <BookingSummary data={formData} planLabel={planLabel} price={price} />
         </div>
       </section>
     </div>

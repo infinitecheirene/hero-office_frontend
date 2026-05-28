@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image'
 import { Globe, Camera, Mail, MapPin, Phone, MessageCircle } from 'lucide-react';
 import { useLanguage } from './LanguageProvider';
 

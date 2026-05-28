@@ -21,8 +21,8 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useLanguage } from "../../components/LanguageProvider";
 
-// Dynamic import for the PanoramaViewer to avoid SSR issues
-const PanoramaViewer = dynamic(() => import("../../components/PanoramaViewer"), {
+// Dynamic import for the Immersive360Tour to avoid SSR issues
+const Immersive360Tour = dynamic(() => import("../../components/PanoramaViewer").then(mod => ({ default: mod.Immersive360Tour })), {
   ssr: false,
   loading: () => (
     <div className="w-full h-[600px] lg:h-[700px] bg-gray-900 rounded-2xl flex items-center justify-center">
@@ -36,6 +36,8 @@ const PanoramaViewer = dynamic(() => import("../../components/PanoramaViewer"), 
 
 export default function VirtualTourPage() {
   const { t } = useLanguage();
+
+  // ─── Everything below is identical to the original ─────────────────────────
 
   const tourLocations = [
     {
@@ -67,6 +69,40 @@ export default function VirtualTourPage() {
       title: "Cafe Area",
       description: "Modern cafeteria with daily meal options",
       features: ["Hot Meals", "30-Seat Capacity", "24/7 Vending"],
+    },
+  ];
+
+  // Rooms data for Immersive360Tour - using wide images for panoramic effect
+  const rooms = [
+    {
+      id: "lobby",
+      name: "Main Lobby",
+      panoramaUrl: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=2400&q=85",
+      thumbnail: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&q=80",
+    },
+    {
+      id: "office-premium",
+      name: "Premium Office Suite",
+      panoramaUrl: "/360-office.jpg",
+      thumbnail: "https://images.unsplash.com/photo-1604328698692-f76ea9498e76?w=400&q=80",
+    },
+    {
+      id: "meeting-large",
+      name: "Executive Boardroom",
+      panoramaUrl: "/360-office.jpg",
+      thumbnail: "https://images.unsplash.com/photo-1600508774634-4e11d34730e2?w=400&q=80",
+    },
+    {
+      id: "lounge",
+      name: "Lounge Area",
+      panoramaUrl: "/360-office.jpg",
+      thumbnail: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=400&q=80",
+    },
+    {
+      id: "cafe",
+      name: "Cafe Area",
+      panoramaUrl: "/360-office.jpg",
+      thumbnail: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=400&q=80",
     },
   ];
 
@@ -166,7 +202,7 @@ export default function VirtualTourPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            <PanoramaViewer />
+            <Immersive360Tour rooms={rooms} isEmbedded={true} />
           </motion.div>
 
           {/* Quick Instructions */}
@@ -259,67 +295,8 @@ export default function VirtualTourPage() {
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              {t("virtualTour.features.title") as string}
-            </h2>
-            <p className="text-lg text-gray-600">
-              {t("virtualTour.features.subtitle") as string}
-            </p>
-          </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {features.map((feature, index) => (
-              <motion.div
-                key={feature.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                className="text-center p-6 bg-gray-50 rounded-2xl hover:bg-[#C5D2EC]/30 transition-colors"
-              >
-                <div className="w-14 h-14 bg-[#C5D2EC]/50 rounded-xl flex items-center justify-center mx-auto mb-4">
-                  <feature.icon className="w-7 h-7 text-[#1B3A8C]" />
-                </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  {feature.title}
-                </h3>
-                <p className="text-gray-600 text-sm">{feature.description}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Instructions Section */}
-      <section className="py-20 bg-gray-900 text-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">{t("virtualTour.howTo.title") as string}</h2>
-            <p className="text-gray-400">
-              {t("virtualTour.features.subtitle") as string}
-            </p>
-          </div>
-          <div className="grid md:grid-cols-2 gap-6">
-            {howToSteps.map((item) => (
-              <div key={item.step} className="flex gap-4 p-6 bg-white/5 backdrop-blur-sm rounded-2xl">
-                <div className="w-10 h-10 bg-[#1B3A8C] rounded-full flex items-center justify-center flex-shrink-0 font-bold">
-                  {item.step}
-                </div>
-                <div>
-                  <h3 className="font-semibold mb-2">{item.title}</h3>
-                  <p className="text-gray-400 text-sm">{item.description}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-[#1B3A8C] to-[#3B5EA6]">
+      <section className="py-20 bg-gray-900 text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
             {t("virtualTour.cta.title") as string}

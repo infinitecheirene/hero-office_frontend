@@ -20,75 +20,124 @@ import {
   Train,
   ExternalLink,
 } from "lucide-react";
-import { useLanguage } from "../../components/LanguageProvider";
-
 export default function AboutPage() {
-  const { t } = useLanguage();
 
   const values = [
     {
       icon: Target,
-      title: t("about.values.excellence") as string,
-      description: t("about.values.excellenceDesc") as string,
+      title: "Excellence",
+      description: "We deliver exceptional quality in every aspect of our service.",
     },
     {
       icon: Shield,
-      title: t("about.values.integrity") as string,
-      description: t("about.values.integrityDesc") as string,
+      title: "Integrity",
+      description: "We build trust through transparency and ethical practices.",
     },
     {
       icon: Users,
-      title: t("about.values.customerFirst") as string,
-      description: t("about.values.customerFirstDesc") as string,
+      title: "Customer First",
+      description: "Your success is our priority, and we're dedicated to exceeding expectations.",
     },
     {
       icon: Globe,
-      title: t("about.values.globalStandards") as string,
-      description: t("about.values.globalStandardsDesc") as string,
+      title: "Global Standards",
+      description: "We maintain international quality benchmarks in all our facilities.",
     },
   ];
 
   const stats = [
-    { number: "15+", label: t("about.stats.years") as string },
-    { number: "500+", label: t("about.stats.companies") as string },
-    { number: "3", label: t("about.stats.locations") as string },
-    { number: "50+", label: t("about.stats.team") as string },
+    { number: "15+", label: "Years of Experience" },
+    { number: "500+", label: "Companies Served" },
+    { number: "2", label: "Prime Locations" },
+    { number: "50+", label: "Team Members" },
   ];
 
   const locations = [
     {
-      name: t("about.locations.tower6789") as string,
-      address: t("about.locations.tower6789Address") as string,
+      name: "Tower 6789",
+      address: "6789 Ayala Avenue, Makati City, Metro Manila",
       mapUrl: "https://www.google.com/maps/place/Leopalace21+Philippines+Inc./@14.5568556,121.0168084,16z",
     },
     {
-      name: t("about.locations.insularLife") as string,
-      address: t("about.locations.insularLifeAddress") as string,
+      name: "Insular Life Building",
+      address: "Insular Life Building, Ayala Avenue, Makati, Metro Manila",
       mapUrl: "https://www.google.com/maps/place/Insular+Life+Building,+Ayala+Ave,+Makati,+Metro+Manila",
     },
   ];
 
-  const nearbyLandmarks = (t("about.landmarks") as unknown as Array<{
-    icon: any;
-    name: string;
-    description: string;
-    distance: string;
-  }>).map((item, index) => ({
-    icon: [Plane, Landmark, Building2, Building2, Store, Trees, Utensils, Train][index],
-    name: item.name,
-    description: item.description,
-    distance: item.distance,
-  }));
+  const nearbyLandmarks = [
+    {
+      icon: Plane,
+      name: "Ninoy Aquino International Airport",
+      description: "Main international gateway for flights worldwide",
+      distance: "10 km",
+    },
+    {
+      icon: Landmark,
+      name: "Ayala Museum",
+      description: "Premier cultural institution showcasing Filipino art and history",
+      distance: "0.5 km",
+    },
+    {
+      icon: Building2,
+      name: "Ayala Triangle Gardens",
+      description: "Scenic urban park perfect for walking breaks and outdoor events",
+      distance: "0.3 km",
+    },
+    {
+      icon: Building2,
+      name: "PSE Center",
+      description: "Home of the Philippine Stock Exchange, the country's financial hub",
+      distance: "0.4 km",
+    },
+    {
+      icon: Store,
+      name: "Greenbelt Mall",
+      description: "World-class shopping complex with luxury brands and fine dining",
+      distance: "0.6 km",
+    },
+    {
+      icon: Trees,
+      name: "Legazpi Active Park",
+      description: "Vibrant community park with weekend market and fitness activities",
+      distance: "0.8 km",
+    },
+    {
+      icon: Utensils,
+      name: "Paseo Center",
+      description: "Convenient food court offering diverse cuisine and retail options",
+      distance: "0.7 km",
+    },
+    {
+      icon: Train,
+      name: "MRT Ayala Station",
+      description: "Major transit hub connecting to key destinations across Metro Manila",
+      distance: "0.9 km",
+    },
+  ];
 
-  const milestones = (t("about.milestones") as unknown as Array<{
-    year: string;
-    title: string;
-    description: string;
-  }>).map(item => ({
-    year: item.year,
-    title: item.title,
-    description: item.description,
-  }));
+  const milestones = [
+    {
+      year: "2008",
+      title: "Establishment",
+      description: "Founded with a vision to provide premium office solutions in the Philippines.",
+    },
+    {
+      year: "2012",
+      title: "Expansion",
+      description: "Opened our second location to meet growing demand for flexible workspaces.",
+    },
+    {
+      year: "2018",
+      title: "Modernization",
+      description: "Upgraded all facilities with state-of-the-art technology and amenities.",
+    },
+    {
+      year: "2023",
+      title: "Digital Transformation",
+      description: "Launched online booking and virtual tour capabilities for enhanced customer experience.",
+    },
+  ];
 
   return (
     <div className="min-h-screen">
@@ -102,10 +151,10 @@ export default function AboutPage() {
             className="max-w-3xl"
           >
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-              {t("about.hero.title") as string}
+              About Hero Office
             </h1>
             <p className="text-xl text-gray-300">
-              {t("about.hero.subtitle") as string}
+              Your trusted partner for premium office solutions in the heart of Makati's business district.
             </p>
           </motion.div>
         </div>
@@ -122,17 +171,17 @@ export default function AboutPage() {
               viewport={{ once: true }}
             >
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-                {t("about.overview.title") as string}
+                Our Story
               </h2>
               <div className="space-y-4 text-gray-600">
                 <p>
-                  {t("about.overview.p1") as string}
+                  Hero Office has been a leading provider of premium office solutions in the Philippines for over 15 years. We specialize in serviced offices, meeting rooms, and virtual office services designed to meet the diverse needs of modern businesses.
                 </p>
                 <p>
-                  {t("about.overview.p2") as string}
+                  Our strategically located facilities in Makati's premier business district offer unparalleled convenience, accessibility, and professional environments that empower your business to thrive.
                 </p>
                 <p>
-                  {t("about.overview.p3") as string}
+                  With a commitment to excellence and customer satisfaction, we've helped over 500 companies establish their presence in the Philippines, from startups to multinational corporations.
                 </p>
               </div>
             </motion.div>
@@ -184,9 +233,9 @@ export default function AboutPage() {
               <div className="w-14 h-14 bg-[#1B3A8C] rounded-xl flex items-center justify-center mb-6">
                 <Eye className="w-7 h-7 text-white" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">{t("about.vision.title") as string}</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Our Vision</h3>
               <p className="text-gray-600 leading-relaxed">
-                {t("about.vision.description") as string}
+                To be the leading provider of innovative and sustainable office solutions in the Philippines, setting the standard for excellence in workspace management and customer service.
               </p>
             </motion.div>
             <motion.div
@@ -199,9 +248,9 @@ export default function AboutPage() {
               <div className="w-14 h-14 bg-[#3B5EA6] rounded-xl flex items-center justify-center mb-6">
                 <Award className="w-7 h-7 text-white" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">{t("about.mission.title") as string}</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Our Mission</h3>
               <p className="text-gray-600 leading-relaxed">
-                {t("about.mission.description") as string}
+                To provide flexible, high-quality office solutions that empower businesses to succeed by combining world-class facilities with exceptional service and support.
               </p>
             </motion.div>
           </div>
@@ -213,10 +262,10 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              {t("about.values.title") as string}
+              Core Values
             </h2>
             <p className="text-lg text-gray-600">
-              {t("about.values.subtitle") as string}
+              The principles that guide everything we do
             </p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -248,13 +297,13 @@ export default function AboutPage() {
           <div className="text-center max-w-3xl mx-auto mb-16">
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#C5D2EC] rounded-full text-sm text-[#1B3A8C] mb-6">
               <MapPin className="w-4 h-4" />
-              {t("about.location.badge") as string}
+Prime Business Locations
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              {t("about.location.title") as string}
+              Our Locations
             </h2>
             <p className="text-lg text-gray-600">
-              {t("about.location.subtitle") as string}
+              Strategically positioned in the heart of Metro Manila's business district
             </p>
           </div>
 
@@ -292,10 +341,10 @@ export default function AboutPage() {
           {/* Surrounding Environment */}
           <div className="text-center max-w-3xl mx-auto mb-12">
             <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
-              {t("about.surrounding.title") as string}
+              Nearby Landmarks
             </h3>
             <p className="text-gray-600">
-              {t("about.surrounding.subtitle") as string}
+              Everything you need within walking distance
             </p>
           </div>
 
@@ -327,32 +376,32 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              {t("about.whyChooseUs.title") as string}
+              Why Choose Us
             </h2>
             <p className="text-lg text-gray-400">
-              {t("about.whyChooseUs.subtitle") as string}
+              Experience the difference with Hero Office
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             <div className="p-6 bg-white/5 backdrop-blur-sm rounded-2xl">
               <Clock className="w-10 h-10 text-[#5C7ABF] mb-4" />
-              <h3 className="text-xl font-semibold mb-2">{t("about.whyChooseUs.businessHours") as string}</h3>
+              <h3 className="text-xl font-semibold mb-2">24/7 Access</h3>
               <p className="text-gray-400">
-                {t("about.whyChooseUs.businessHoursDesc") as string}
+                Access your workspace anytime, day or night, with secure entry systems.
               </p>
             </div>
             <div className="p-6 bg-white/5 backdrop-blur-sm rounded-2xl">
               <Users className="w-10 h-10 text-[#5C7ABF] mb-4" />
-              <h3 className="text-xl font-semibold mb-2">{t("about.whyChooseUs.bilingualSupport") as string}</h3>
+              <h3 className="text-xl font-semibold mb-2">Bilingual Support</h3>
               <p className="text-gray-400">
-                {t("about.whyChooseUs.bilingualSupportDesc") as string}
+                Our team speaks both English and Japanese to serve your needs effectively.
               </p>
             </div>
             <div className="p-6 bg-white/5 backdrop-blur-sm rounded-2xl">
               <Shield className="w-10 h-10 text-[#5C7ABF] mb-4" />
-              <h3 className="text-xl font-semibold mb-2">{t("about.whyChooseUs.privacy") as string}</h3>
+              <h3 className="text-xl font-semibold mb-2">Privacy & Security</h3>
               <p className="text-gray-400">
-                {t("about.whyChooseUs.privacyDesc") as string}
+                Your data and privacy are protected with our comprehensive security measures.
               </p>
             </div>
           </div>
