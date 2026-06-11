@@ -47,7 +47,7 @@
       "fullSupport": "充実のサポート体制",
       "fullSupportDesc": "日本語対応スタッフがビジネスニーズをサポートします。",
       "comfortableSpace": "快適なオフィススペース",
-      "comfortableDesc": "広々とした共有スペースと設備の整ったオフィスでビジネスをスタート。",
+      "comfortableSpaceDesc": "広々とした共有スペースと設備の整ったオフィスでビジネスをスタート。",
       "professionalSupport": "プロフェッショナルサポート",
       "professionalSupportDesc": "フィリピンで事業展開する日本企業のための包括的なビジネスサポート。"
     },
@@ -180,6 +180,7 @@
       "tower6789Feature2": "PEZA認定ビル",
       "tower6789Feature3": "エアコン：平日8:00〜20:00",
       "tower6789Feature4": "最大10名の会議室",
+      "tower6789Feature5": "高速インターネット完備",
       "tower6789Cta": "Tower 6789 マカティを見る",
       "insularLife": "インシュラーライフビル",
       "insularLifeLocation": "アヤラ＆パセオ・デ・ロハス",
