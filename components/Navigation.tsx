@@ -30,7 +30,7 @@ export default function Navigation() {
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <Image src="/header_logo_manila.png" alt="Hero Serviced Office" width={150} height={50} />
+            <Image src="/header_logo_manila.png" alt="HERO Serviced Office" width={150} height={50} />
           </Link>
 
           {/* Desktop Navigation */}
@@ -49,14 +49,14 @@ export default function Navigation() {
           {/* CTA Button */}
           <div className="hidden lg:flex items-center gap-4">
             <LanguageSwitcher />
-            {isAuthenticated ? (
+            {/* {isAuthenticated ? (
               <UserProfileDropdown />
             ) : (
               <Link href="/login"
                 className="px-5 py-2.5 bg-transparent hover:bg-[#C5D2EC]/30 text-[#1B3A8C] border border-[#1B3A8C] font-medium text-sm rounded-full">
                 {t('navigation.login') as string}
               </Link>
-            )}
+            )} */}
             <Link
               href="/reservation"
               className="px-5 py-2.5 bg-[#1B3A8C] text-white font-medium text-sm rounded-full hover:bg-[#3B5EA6] transition-colors"

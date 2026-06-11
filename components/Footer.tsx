@@ -40,7 +40,7 @@ export default function Footer() {
                 <span className="text-white font-bold text-xl">H</span>
               </div>
               <div>
-                <span className="text-xl font-bold text-white">Hero</span>
+                <span className="text-xl font-bold text-white">HERO</span>
                 <span className="text-sm text-gray-400 block -mt-1">Serviced Office</span>
               </div>
             </div>

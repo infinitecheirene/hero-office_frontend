@@ -2,28 +2,14 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import {
   Building2,
-  Users,
-  Briefcase,
-  MapPin,
   Phone,
-  Wifi,
-  Coffee,
-  Printer,
-  Shield,
-  Clock,
   CheckCircle2,
   ArrowRight,
   Mail,
-  Car,
-  Snowflake,
-  FileText,
-  BadgeCheck,
-  DoorOpen,
   ChevronRight,
-  Calendar,
-  Globe,
 } from "lucide-react";
 import { useLanguage } from "../../components/LanguageProvider";
 
@@ -77,7 +63,7 @@ export default function ServicesPage() {
               viewport={{ once: true }}
               className="bg-white rounded-2xl shadow-sm hover:shadow-lg transition-shadow overflow-hidden"
             >
-              <div className="p-6 border-b border-gray-100">
+              <div className="p-6 border-b border-gray-100 relative">
                 <div className="flex items-center gap-3 mb-3">
                   <div className="w-12 h-12 bg-[#1B3A8C] rounded-xl flex items-center justify-center flex-shrink-0">
                     <Building2 className="w-6 h-6 text-white" />
@@ -89,6 +75,7 @@ export default function ServicesPage() {
                 </div>
                 <p className="text-gray-600 text-sm">{t("services.locations.tower6789Address") as string}</p>
               </div>
+
               <div className="p-6">
                 <ul className="space-y-3 mb-6">
                   <li className="flex items-start gap-3 text-sm text-gray-700">
@@ -106,6 +93,10 @@ export default function ServicesPage() {
                   <li className="flex items-start gap-3 text-sm text-gray-700">
                     <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
                     <span>{t("services.locations.tower6789Feature4") as string}</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-sm text-gray-700">
+                    <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                    <span>{t("services.locations.tower6789Feature5") as string}</span>
                   </li>
                 </ul>
                 <Link
@@ -138,6 +129,7 @@ export default function ServicesPage() {
                 </div>
                 <p className="text-gray-600 text-sm">{t("services.locations.insularLifeAddress") as string}</p>
               </div>
+              
               <div className="p-6">
                 <ul className="space-y-3 mb-6">
                   <li className="flex items-start gap-3 text-sm text-gray-700">
@@ -176,7 +168,7 @@ export default function ServicesPage() {
 
       {/* Move-in Flow */}
       <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               {t("services.moveInFlow.title") as string}

@@ -151,7 +151,7 @@ export default function AboutPage() {
             className="max-w-3xl"
           >
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-              About Hero Office
+              About HERO Serviced Office
             </h1>
             <p className="text-xl text-gray-300">
               Your trusted partner for premium office solutions in the heart of Makati's business district.
@@ -175,7 +175,7 @@ export default function AboutPage() {
               </h2>
               <div className="space-y-4 text-gray-600">
                 <p>
-                  Hero Office has been a leading provider of premium office solutions in the Philippines for over 15 years. We specialize in serviced offices, meeting rooms, and virtual office services designed to meet the diverse needs of modern businesses.
+                  HERO Serviced Office has been a leading provider of premium office solutions in the Philippines for over 15 years. We specialize in serviced offices, meeting rooms, and virtual office services designed to meet the diverse needs of modern businesses.
                 </p>
                 <p>
                   Our strategically located facilities in Makati's premier business district offer unparalleled convenience, accessibility, and professional environments that empower your business to thrive.
@@ -379,7 +379,7 @@ Prime Business Locations
               Why Choose Us
             </h2>
             <p className="text-lg text-gray-400">
-              Experience the difference with Hero Office
+              Experience the difference with HERO Serviced Office
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">

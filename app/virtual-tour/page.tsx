@@ -20,6 +20,7 @@ import {
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useLanguage } from "../../components/LanguageProvider";
+import { useState } from "react";
 
 // Dynamic import for the Immersive360Tour to avoid SSR issues
 const Immersive360Tour = dynamic(() => import("../../components/PanoramaViewer").then(mod => ({ default: mod.Immersive360Tour })), {
@@ -36,40 +37,50 @@ const Immersive360Tour = dynamic(() => import("../../components/PanoramaViewer")
 
 export default function VirtualTourPage() {
   const { t } = useLanguage();
+  const [activeTab, setActiveTab] = useState("tower6789");
 
   // ─── Everything below is identical to the original ─────────────────────────
 
-  const tourLocations = [
-    {
-      id: "lobby",
-      title: t("virtualTour.locations.tower6789") as string,
-      description: t("virtualTour.locations.tower6789Desc") as string,
-      features: t("virtualTour.locations.tower6789Features") as unknown as string[],
-    },
-    {
-      id: "office-premium",
-      title: t("virtualTour.locations.tower6789Office") as string,
-      description: t("virtualTour.locations.tower6789OfficeDesc") as string,
-      features: t("virtualTour.locations.tower6789OfficeFeatures") as unknown as string[],
-    },
-    {
-      id: "meeting-large",
-      title: t("virtualTour.locations.insularLifeMeeting") as string,
-      description: t("virtualTour.locations.insularLifeMeetingDesc") as string,
-      features: t("virtualTour.locations.insularLifeMeetingFeatures") as unknown as string[],
-    },
-    {
-      id: "lounge",
-      title: t("virtualTour.locations.insularLife") as string,
-      description: t("virtualTour.locations.insularLifeDesc") as string,
-      features: t("virtualTour.locations.insularLifeFeatures") as unknown as string[],
-    },
-    {
-      id: "cafe",
-      title: "Cafe Area",
-      description: "Modern cafeteria with daily meal options",
-      features: ["Hot Meals", "30-Seat Capacity", "24/7 Vending"],
-    },
+  const tourLocations = {
+    tower6789: [
+      {
+        id: "lobby",
+        title: t("virtualTour.locations.tower6789") as string,
+        description: t("virtualTour.locations.tower6789Desc") as string,
+        features: t("virtualTour.locations.tower6789Features") as unknown as string[],
+      },
+      {
+        id: "office-premium",
+        title: t("virtualTour.locations.tower6789Office") as string,
+        description: t("virtualTour.locations.tower6789OfficeDesc") as string,
+        features: t("virtualTour.locations.tower6789OfficeFeatures") as unknown as string[],
+      },
+    ],
+    insularLife: [
+      {
+        id: "meeting-large",
+        title: t("virtualTour.locations.insularLifeMeeting") as string,
+        description: t("virtualTour.locations.insularLifeMeetingDesc") as string,
+        features: t("virtualTour.locations.insularLifeMeetingFeatures") as unknown as string[],
+      },
+      {
+        id: "lounge",
+        title: t("virtualTour.locations.insularLife") as string,
+        description: t("virtualTour.locations.insularLifeDesc") as string,
+        features: t("virtualTour.locations.insularLifeFeatures") as unknown as string[],
+      },
+      {
+        id: "cafe",
+        title: "Cafe Area",
+        description: "Modern cafeteria with daily meal options",
+        features: ["Hot Meals", "30-Seat Capacity", "24/7 Vending"],
+      },
+    ],
+  };
+
+  const locationTabs = [
+    { id: "tower6789", label: "Tower 6789", icon: Building2 },
+    { id: "insularLife", label: "Insular Life", icon: Building2 },
   ];
 
   // Rooms data for Immersive360Tour - using wide images for panoramic effect
@@ -228,14 +239,33 @@ export default function VirtualTourPage() {
               {t("virtualTour.hero.subtitle") as string}
             </p>
           </div>
+
+          {/* Tab Buttons */}
+          <div className="flex justify-center gap-4 mb-12">
+            {locationTabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex items-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all ${
+                  activeTab === tab.id
+                    ? "bg-[#1B3A8C] text-white shadow-lg"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                }`}
+              >
+                <tab.icon className="w-5 h-5" />
+                {tab.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Locations Grid */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {tourLocations.map((location, index) => (
+            {tourLocations[activeTab as keyof typeof tourLocations].map((location, index) => (
               <motion.div
                 key={location.id}
                 initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
                 className="group bg-gray-50 rounded-2xl p-6 hover:bg-[#C5D2EC]/30 transition-colors"
               >
                 <div className="flex items-center gap-4 mb-4">
@@ -255,40 +285,6 @@ export default function VirtualTourPage() {
                     </li>
                   ))}
                 </ul>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Amenities Section */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              {t("virtualTour.amenities.title") as string}
-            </h2>
-            <p className="text-lg text-gray-600">
-              {t("virtualTour.amenities.subtitle") as string}
-            </p>
-          </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {amenities.map((amenity, index) => (
-              <motion.div
-                key={amenity.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                className="flex items-start gap-4 p-6 bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow"
-              >
-                <div className="w-12 h-12 bg-[#C5D2EC]/50 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <amenity.icon className="w-6 h-6 text-[#1B3A8C]" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900 mb-1">{amenity.title}</h3>
-                  <p className="text-gray-600 text-sm">{amenity.description}</p>
-                </div>
               </motion.div>
             ))}
           </div>

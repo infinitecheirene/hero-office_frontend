@@ -9,20 +9,19 @@
     "services": "サービス",
     "virtualTour": "バーチャルツアー",
     "reservation": "ご予約",
-    "login": "ログイン",
     "contact": "お問い合わせ",
     "getInTouch": "お問い合わせ",
     "phone": "+63 2 8801-3417"
   },
   "footer": {
-    "company": "Hero Serviced Office",
+    "company": "HERO Serviced Office",
     "tagline": "マニラでのプロフェッショナルなワークスペースソリューションの入り口",
     "quickLinks": "クイックリンク",
     "ourServices": "サービス",
     "contactUs": "お問い合わせ",
     "businessHours": "営業時間",
     "hours": "月曜〜金曜 9:00〜18:00（フィリピン時間）",
-    "copyright": "© {year} Hero Serviced Office, Inc. All rights reserved.",
+    "copyright": "© {year} HERO Serviced Office, Inc. All rights reserved.",
     "peza": "PEZA認定 | マカティのサービスオフィス",
     "privacyPolicy": "プライバシーポリシー",
     "termsOfService": "利用規約"
@@ -41,7 +40,7 @@
       "satisfactionRate": "満足度"
     },
     "features": {
-      "title": "Hero Serviced Officeを選ぶ理由",
+      "title": "HERO Serviced Officeを選ぶ理由",
       "subtitle": "日本品質のサービスを、マニラのビジネス街の中心で提供しています。",
       "excellentLocation": "最高の立地",
       "excellentLocationDesc": "マカティの中心ビジネス街であるアヤラ通り沿いに位置しています。",
@@ -56,8 +55,12 @@
       "title": "サービス",
       "subtitle": "ビジネスニーズに合わせた柔軟なオフィスソリューション",
       "viewAll": "すべてのサービスを見る",
-      "servicedOffices": "サービスオフィス",
-      "servicedOfficesDesc": "最新設備を備えた完全装備のプライベートオフィス。柔軟な賃貸条件。",
+      "privateOffices": "個室",
+      "privateOfficesDesc": "最新設備を備えた完全装備のプライベートオフィス。柔軟な賃貸条件。",
+      "sharedOffices": "シェアオフィス",
+      "sharedOfficesDesc": "ネットワーキングと生産性のための共同作業スペース。",
+      "coworking": "コワーキングスペース",
+      "coworkingDesc": "すべてのオフィス設備と活気あるコミュニティへのアクセスがあるオープンプランの作業エリア。",
       "virtualOffices": "バーチャルオフィス",
       "virtualOfficesDesc": "リモートビジネスのためのプロフェッショナルな住所と電話対応サービス。",
       "conferenceRooms": "会議室",
@@ -83,7 +86,7 @@
     "testimonials": {
       "title": "お客様の声",
       "subtitle": "フィリピン進出を目指す日本企業に信頼されています",
-      "testimonial1": "Hero Serviced Officeのおかげで、フィリピン進出がスムーズに進みました。日本語対応スタッフのサポートが非常に助かっています。",
+      "testimonial1": "HERO Serviced Officeのおかげで、フィリピン進出がスムーズに進みました。日本語対応スタッフのサポートが非常に助かっています。",
       "testimonial1Name": "山本 武司",
       "testimonial1Company": "TechStart Japan Co.",
       "testimonial2": "アヤラ通りの立地がビジネスに最適です。プロフェッショナルな環境と優れた設備。",
@@ -99,7 +102,7 @@
   },
   "about": {
     "hero": {
-      "title": "Hero Serviced Officeについて",
+      "title": "HERO Serviced Officeについて",
       "subtitle": "2019年以来、フィリピンの日本企業ビジネス展開をサポート"
     },
     "company": {
@@ -169,7 +172,7 @@
     },
     "locations": {
       "title": "所在地",
-      "subtitle": "ビジネスニーズに最適なHero PHのロケーションをお選びください",
+      "subtitle": "ビジネスニーズに最適なHERO PHのロケーションをお選びください",
       "tower6789": "Tower 6789",
       "tower6789Location": "マカティCBD",
       "tower6789Address": "23階、アヤラ通り6789、マカティ市",
@@ -278,13 +281,25 @@
       "tower6789Features": ["日本語対応スタッフ", "来客待合室", "郵便物管理"],
       "tower6789Office": "Tower 6789 - 個室",
       "tower6789OfficeDesc": "典型的なプライベートオフィス",
-      "tower6789OfficeFeatures": ["人間工学家具", "高速インターネット", "電話回線"],
+      "tower6789OfficeFeatures": [
+        "人間工学家具",
+        "高速インターネット",
+        "電話回線"
+      ],
       "insularLife": "インシュラーライフ - コワーキング",
       "insularLifeDesc": "共同作業スペース",
-      "insularLifeFeatures": ["フレキシブルな座席", "ネットワーキングの機会", "無料コーヒー"],
+      "insularLifeFeatures": [
+        "フレキシブルな座席",
+        "ネットワーキングの機会",
+        "無料コーヒー"
+      ],
       "insularLifeMeeting": "インシュラーライフ - 会議室",
       "insularLifeMeetingDesc": "プロフェッショナルな会議スペース",
-      "insularLifeMeetingFeatures": ["最大20名収容", "ビデオ会議", "ホワイトボード"]
+      "insularLifeMeetingFeatures": [
+        "最大20名収容",
+        "ビデオ会議",
+        "ホワイトボード"
+      ]
     },
     "amenities": {
       "title": "主な設備",

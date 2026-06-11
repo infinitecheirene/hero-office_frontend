@@ -9,7 +9,6 @@
     "services": "Services",
     "virtualTour": "Virtual Tour",
     "reservation": "Reservation",
-    "login": "Login",
     "contact": "Contact",
     "getInTouch": "Get in Touch",
     "phone": "+63 2 8801-3417"
@@ -22,7 +21,7 @@
     "contactUs": "Contact Us",
     "businessHours": "Business Hours",
     "hours": "Mon-Fri: 9:00 AM - 6:00 PM (PH Time)",
-    "copyright": "© {year} Hero Serviced Office, Inc. All rights reserved.",
+    "copyright": "© {year} HERO Serviced Office, Inc. All rights reserved.",
     "peza": "PEZA Certified | Serviced Office in Makati",
     "privacyPolicy": "Privacy Policy",
     "termsOfService": "Terms of Service"
@@ -40,7 +39,7 @@
       "satisfactionRate": "Satisfaction Rate"
     },
     "features": {
-      "title": "Why Choose Hero Serviced Office?",
+      "title": "Why Choose HERO Serviced Office?",
       "subtitle": "We provide comprehensive office solutions with Japanese-standard service quality right in the heart of Manila's business district.",
       "excellentLocation": "Excellent Location",
       "excellentLocationDesc": "Conveniently located along Ayala Avenue, the central business district of Makati City.",
@@ -55,11 +54,15 @@
       "title": "Our Services",
       "subtitle": "Flexible office solutions tailored to your business needs",
       "viewAll": "View All Services",
-      "servicedOffices": "Serviced Offices",
-      "servicedOfficesDesc": "Fully furnished private offices with modern amenities and flexible lease terms.",
-      "virtualOffices": "Virtual Offices",
+      "privateOffices": "Private Office",
+      "privateOfficesDesc": "Fully furnished private offices with modern amenities and flexible lease terms.",
+      "sharedOffices": "Shared Office",
+      "sharedOfficesDesc": "Collaborative workspaces designed for networking and productivity.",
+      "coworking": "Co-working Space",
+      "coworkingDesc": "Open-plan work areas with access to all office facilities and a vibrant community.",
+      "virtualOffices": "Virtual Office",
       "virtualOfficesDesc": "Professional business address and call handling services for remote businesses.",
-      "conferenceRooms": "Conference Rooms",
+      "conferenceRooms": "Conference Room",
       "conferenceRoomsDesc": "State-of-the-art meeting rooms equipped with video conferencing capabilities.",
       "reserveNow": "Reserve Now →"
     },
@@ -82,7 +85,7 @@
     "testimonials": {
       "title": "What Our Clients Say",
       "subtitle": "Trusted by Japanese companies expanding into the Philippines",
-      "testimonial1": "Hero Serviced Office made our expansion to the Philippines seamless. The Japanese-speaking staff is incredibly helpful.",
+      "testimonial1": "HERO Serviced Office made our expansion to the Philippines seamless. The Japanese-speaking staff is incredibly helpful.",
       "testimonial1Name": "Takeshi Yamamoto",
       "testimonial1Company": "TechStart Japan Co.",
       "testimonial2": "The location on Ayala Avenue is perfect for our business. Professional environment with excellent facilities.",
@@ -98,7 +101,7 @@
   },
   "about": {
     "hero": {
-      "title": "About Hero Serviced Office",
+      "title": "About HERO Serviced Office",
       "subtitle": "Supporting Japanese business expansion in the Philippines since 2019"
     },
     "company": {
@@ -174,8 +177,9 @@
       "tower6789Address": "23rd Floor, 6789 Ayala Avenue, Makati City",
       "tower6789Feature1": "49 private rooms (up to 17 people)",
       "tower6789Feature2": "PEZA certified building",
-      "tower6789Feature3": "A/C weekdays 8:00-20:00",
+      "tower6789Feature3": "24-hour air conditioning",
       "tower6789Feature4": "Meeting rooms up to 10 people",
+      "tower6789Feature5": "Use of multifunction copier, printer and scanner.",
       "tower6789Cta": "View Tower 6789 Makati",
       "insularLife": "Insular Life Building",
       "insularLifeLocation": "Ayala & Paseo de Roxas",
@@ -192,17 +196,17 @@
       "title": "Flow Until Moving In",
       "subtitle": "Simple 6-step process to start using our office",
       "step1": "Inquiry",
-      "step1Desc": "Contact us by phone or inquiry form",
+      "step1Desc": "Contact us via phone or inquiry form",
       "step2": "Introduction",
-      "step2Desc": "Staff will introduce the office and provide estimates",
+      "step2Desc": "Office tour and quotation discussion",
       "step3": "Application",
-      "step3Desc": "Submit required documents as instructed",
+      "step3Desc": "Submit the required documents",
       "step4": "Examination",
-      "step4Desc": "Document review (up to 5 business days)",
+      "step4Desc": "Document review within 5 business days",
       "step5": "Contract",
-      "step5Desc": "Sign contract and deposit initial fees",
+      "step5Desc": "Sign the contract and pay initial fees",
       "step6": "Start Using",
-      "step6Desc": "Staff explains facilities and provides room key"
+      "step6Desc": "Receive orientation and room key"
     },
     "inquiry": {
       "title": "Service Office Inquiry",
@@ -272,18 +276,34 @@
     },
     "locations": {
       "title": "Tour Locations",
-      "tower6789": "Tower 6789 - Reception",
+      "tower6789": "Reception",
       "tower6789Desc": "Main reception and lobby area",
-      "tower6789Features": ["Japanese-speaking staff", "Visitor waiting area", "Mail handling"],
-      "tower6789Office": "Tower 6789 - Private Office",
+      "tower6789Features": [
+        "Japanese-speaking staff",
+        "Visitor waiting area",
+        "Mail handling"
+      ],
+      "tower6789Office": "Private Office",
       "tower6789OfficeDesc": "Typical private office room",
-      "tower6789OfficeFeatures": ["Ergonomic furniture", "High-speed internet", "Phone line"],
-      "insularLife": "Insular Life - Coworking",
+      "tower6789OfficeFeatures": [
+        "Ergonomic furniture",
+        "High-speed internet",
+        "Phone line"
+      ],
+      "insularLife": "Coworking",
       "insularLifeDesc": "Collaborative workspace area",
-      "insularLifeFeatures": ["Flexible seating", "Networking opportunities", "Free coffee"],
-      "insularLifeMeeting": "Insular Life - Meeting Room",
+      "insularLifeFeatures": [
+        "Flexible seating",
+        "Networking opportunities",
+        "Free coffee"
+      ],
+      "insularLifeMeeting": "Meeting Room",
       "insularLifeMeetingDesc": "Professional meeting space",
-      "insularLifeMeetingFeatures": ["Up to 20 people capacity", "Video conferencing", "Whiteboard"]
+      "insularLifeMeetingFeatures": [
+        "Up to 20 people capacity",
+        "Video conferencing",
+        "Whiteboard"
+      ]
     },
     "amenities": {
       "title": "Featured Amenities",

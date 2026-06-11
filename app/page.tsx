@@ -71,9 +71,19 @@ export default function Home() {
 
   const services = [
     {
-      title: t("home.services.servicedOffices") as string,
-      description: t("home.services.servicedOfficesDesc") as string,
+      title: t("home.services.privateOffices") as string,
+      description: t("home.services.privateOfficesDesc") as string,
       image: "/office-1.jpg",
+    },
+    {
+      title: t("home.services.sharedOffices") as string,
+      description: t("home.services.sharedOfficesDesc") as string,
+      image: "/shared-office.jpg",
+    },
+    {
+      title: t("home.services.coworking") as string,
+      description: t("home.services.coworkingDesc") as string,
+      image: "/coworking.jpg",
     },
     {
       title: t("home.services.virtualOffices") as string,

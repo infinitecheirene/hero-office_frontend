@@ -109,7 +109,7 @@ export default function SignupPage() {
             Create your account
           </h2>
           <p className="mt-2 text-gray-600">
-            Start your journey with Hero Serviced Office
+            Start your journey with HERO Serviced Office
           </p>
         </div>
 

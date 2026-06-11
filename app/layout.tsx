@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import FloatingSocialMedia from "@/components/FloatingSocialMedia"
 import ClientLayout from "./ClientLayout";
 import { LanguageProvider } from "../components/LanguageProvider";
 import { ToastProvider } from "../components/Toast";
@@ -328,6 +329,7 @@ export default function RootLayout({
           <LanguageProvider>
             <ToastProvider>
               <ClientLayout>{children}</ClientLayout>
+              <FloatingSocialMedia />
             </ToastProvider>
           </LanguageProvider>
         </AuthProvider>
