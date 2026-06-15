@@ -16,7 +16,7 @@
   "footer": {
     "company": "Hero Serviced Office",
     "tagline": "Your gateway to professional workspace solutions in Manila.",
-    "quickLinks": "Quick Links",
+    "aboutUs": "About Us",
     "ourServices": "Our Services",
     "contactUs": "Contact Us",
     "businessHours": "Business Hours",
@@ -342,7 +342,7 @@
   },
   "reservation": {
     "hero": {
-      "title": "Make a Reservation",
+      "title": "Reservation",
       "subtitle": "Book your office space or schedule a tour"
     },
     "steps": {

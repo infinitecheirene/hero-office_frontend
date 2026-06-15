@@ -16,13 +16,13 @@ export default function Navigation() {
   const { isAuthenticated } = useAuth();
 
   const navLinks = [
-    { href: '/', label: t('navigation.home') as string },
-    { href: '/about', label: t('navigation.about') as string },
-    { href: '/services', label: t('navigation.services') as string },
-    { href: '/virtual-tour', label: t('navigation.virtualTour') as string },
-    { href: '/contact', label: t('navigation.contact') as string },
+    { href: '/', label: "Home" },
+    { href: '/about', label: "About" },
+    { href: '/services', label: "Services" },
+    { href: '/virtual-tour', label: "Virtual Tour" },
+    { href: '/contact', label: "Contact" },
+    { href: '/reservation', label: "Reservation" },
   ];
-
 
   return (
     <nav className="sticky top-0 z-50 bg-white backdrop-blur-md shadow-sm">
@@ -61,7 +61,7 @@ export default function Navigation() {
               href="/reservation"
               className="px-5 py-2.5 bg-[#1B3A8C] text-white font-medium text-sm rounded-full hover:bg-[#3B5EA6] transition-colors"
             >
-              {t('navigation.reservation') as string}
+              Reservation
             </Link>
           </div>
 

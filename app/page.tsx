@@ -15,6 +15,7 @@ import {
   Star,
 } from "lucide-react";
 import { useLanguage } from "../components/LanguageProvider";
+import { Benne } from "next/font/google";
 
 export default function Home() {
   const { t } = useLanguage();
@@ -49,53 +50,65 @@ export default function Home() {
   const features = [
     {
       icon: MapPin,
-      title: t("home.features.excellentLocation") as string,
-      description: t("home.features.excellentLocationDesc") as string,
+      title: "Excellent Location",
+      description: "Conveniently located along Ayala Avenue, the central business district of Makati City.",
     },
     {
       icon: Users,
-      title: t("home.features.fullSupport") as string,
-      description: t("home.features.fullSupportDesc") as string,
+      title: "Full Support System",
+      description: "We provide comprehensive support to ensure your business runs smoothly.",
     },
     {
       icon: Building2,
-      title: t("home.features.comfortableSpace") as string,
-      description: t("home.features.comfortableSpaceDesc") as string,
+      title: "Comfortable Office Space",
+      description: "Spacious and well-equipped office spaces designed to enhance your productivity.",
     },
     {
       icon: Headset,
-      title: t("home.features.professionalSupport") as string,
-      description: t("home.features.professionalSupportDesc") as string,
+      title: "Professional Support",
+      description: "Professional assistance available to support your business needs.",
     },
   ];
 
   const services = [
     {
-      title: t("home.services.privateOffices") as string,
-      description: t("home.services.privateOfficesDesc") as string,
+      title: "Private Offices",
+      description: "Private offices designed for individual professionals and small teams.",
       image: "/office-1.jpg",
     },
     {
-      title: t("home.services.sharedOffices") as string,
-      description: t("home.services.sharedOfficesDesc") as string,
+      title: "Shared Offices",
+      description: "Collaborative workspaces perfect for startups and remote teams.",
       image: "/shared-office.jpg",
     },
     {
-      title: t("home.services.coworking") as string,
-      description: t("home.services.coworkingDesc") as string,
+      title: "Co-working Spaces",
+      description: "Flexible workspaces designed for freelancers and entrepreneurs.",
       image: "/coworking.jpg",
     },
     {
-      title: t("home.services.virtualOffices") as string,
-      description: t("home.services.virtualOfficesDesc") as string,
+      title: "Virtual Offices",
+      description: "Remote office solutions for businesses that need flexibility and scalability.",
       image: "/virtual-office.jpg",
     },
     {
-      title: t("home.services.conferenceRooms") as string,
-      description: t("home.services.conferenceRoomsDesc") as string,
+      title: "Conference Rooms",
+      description: "Professional meeting spaces equipped with the latest technology.",
       image: "/conference.jpg",
     },
   ];
+
+  const benefits = [
+    "High-speed internet and WiFi connectivity",
+    "24/7 security and access control",
+    "Professional reception and mail handling",
+    "Meeting rooms with video conferencing",
+    "Cafe and lounge areas",
+    "Japanese-speaking support staff",
+    "Printing and copying facilities",
+    "Cleaning and maintenance services"
+  ];
+
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
@@ -108,9 +121,8 @@ export default function Home() {
               src={slide.image}
               alt={slide.location}
               fill
-              className={`absolute inset-0 object-cover transition-opacity duration-1000 ${
-                currentSlide === index ? "opacity-100" : "opacity-0"
-              }`}
+              className={`absolute inset-0 object-cover transition-opacity duration-1000 ${currentSlide === index ? "opacity-100" : "opacity-0"
+                }`}
               priority={index === 0}
             />
           ))}
@@ -125,11 +137,12 @@ export default function Home() {
             className="max-w-3xl"
           >
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
-              {t("home.hero.title") as string}{" "}
-              <span className="text-[#8FA8D6]">{t("home.hero.highlight") as string}</span>
+              Your Gateway to Business Success in the <br/>
+              <span className="text-[#8FA8D6]">Philippines</span>
             </h1>
-            <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-xl">
-              {t("home.hero.description") as string}
+            <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl">
+              Premium serviced offices in the heart of Makati City. <br/>
+              Perfect for Japanese companies expanding into the Philippines market.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
@@ -137,28 +150,27 @@ export default function Home() {
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-[#1B3A8C] rounded-full font-semibold hover:bg-gray-100 transition-colors"
               >
                 <Play className="w-5 h-5" />
-                {t("home.hero.virtualTour") as string}
+                Virtual Tour
               </Link>
               <Link
                 href="/contact"
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-[#3B5EA6] text-white rounded-full font-semibold hover:bg-[#5C7ABF] transition-colors"
               >
-                {t("home.hero.getQuote") as string}
-                <ArrowRight className="w-5 h-5" />
+                Contact Us
               </Link>
             </div>
             <div className="flex items-center gap-8 mt-10 pt-10 border-t border-white/10">
               <div>
                 <div className="text-3xl font-bold">15+</div>
-                <div className="text-sm text-gray-400">{t("home.hero.yearsExperience") as string}</div>
+                <div className="text-sm text-gray-400">Years Experience</div>
               </div>
               <div>
                 <div className="text-3xl font-bold">500+</div>
-                <div className="text-sm text-gray-400">{t("home.hero.companiesServed") as string}</div>
+                <div className="text-sm text-gray-400">Companies Served</div>
               </div>
               <div>
                 <div className="text-3xl font-bold">98%</div>
-                <div className="text-sm text-gray-400">{t("home.hero.satisfactionRate") as string}</div>
+                <div className="text-sm text-gray-400">Satisfaction Rate</div>
               </div>
             </div>
           </motion.div>
@@ -176,9 +188,8 @@ export default function Home() {
             <button
               key={index}
               onClick={() => setCurrentSlide(index)}
-              className={`w-2 h-2 rounded-full transition-all ${
-                currentSlide === index ? "bg-white w-6" : "bg-white/50"
-              }`}
+              className={`w-2 h-2 rounded-full transition-all ${currentSlide === index ? "bg-white w-6" : "bg-white/50"
+                }`}
             />
           ))}
         </div>
@@ -216,17 +227,17 @@ export default function Home() {
           <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-12">
             <div>
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                {t("home.services.title") as string}
+                Our Services
               </h2>
-              <p className="text-lg text-gray-600 max-w-2xl">
-                {t("home.services.subtitle") as string}
+              <p className="text-lg text-gray-600">
+                We offer a range of flexible office solutions to meet the unique needs of your business.
               </p>
             </div>
             <Link
               href="/services"
               className="inline-flex items-center gap-2 mt-4 md:mt-0 text-[#1B3A8C] font-semibold hover:text-[#3B5EA6]"
             >
-              {t("home.services.viewAll") as string}
+              View All Services 
               <ArrowRight className="w-5 h-5" />
             </Link>
           </div>
@@ -269,13 +280,13 @@ export default function Home() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-                {t("home.benefits.title") as string}
+                Everything You Need to Succeed
               </h2>
               <p className="text-lg text-gray-600 mb-8">
-                {t("home.benefits.subtitle") as string}
+                Our offices come fully equipped with modern facilities and amenities to ensure your business operates smoothly from day one.
               </p>
               <ul className="space-y-4">
-                {(t("home.benefits.benefitsList") as unknown as string[]).map((benefit) => (
+                {(benefits).map((benefit) => (
                   <li key={benefit} className="flex items-center gap-3">
                     <CheckCircle2 className="w-5 h-5 text-[#1B3A8C] flex-shrink-0" />
                     <span className="text-gray-700">{benefit}</span>
@@ -293,8 +304,8 @@ export default function Home() {
                     <CheckCircle2 className="w-6 h-6 text-[#1B3A8C]" />
                   </div>
                   <div>
-                    <div className="font-semibold text-gray-900">{t("home.benefits.readyToUse") as string}</div>
-                    <div className="text-sm text-gray-600">{t("home.benefits.moveInImmediately") as string}</div>
+                    <div className="font-semibold text-gray-900">Ready to Use</div>
+                    <div className="text-sm text-gray-600">Move in immediately with all amenities provided.</div>
                   </div>
                 </div>
               </div>
@@ -307,23 +318,23 @@ export default function Home() {
       <section className="py-20 bg-gradient-to-r from-[#1B3A8C] to-[#3B5EA6]">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
-            {t("home.cta.title") as string}
+            Ready to Start Your Business in the Philippines?
           </h2>
           <p className="text-xl text-white/90 mb-8">
-            {t("home.cta.subtitle") as string}
+            Contact us today for a personalized tour and discover the perfect office solution for your business.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/reservation"
               className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-[#1B3A8C] rounded-full font-semibold hover:bg-gray-100 transition-colors"
             >
-              {t("home.cta.makeReservation") as string}
+              Make a Reservation
             </Link>
             <Link
               href="/contact"
               className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-transparent border-2 border-white text-white rounded-full font-semibold hover:bg-white/10 transition-colors"
             >
-              {t("home.cta.contactUs") as string}
+              Contact Us
             </Link>
           </div>
         </div>
